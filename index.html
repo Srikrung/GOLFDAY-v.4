@@ -552,7 +552,10 @@ function showHole(h){
     <div class="hc-top">
       <div class="hc-num"><span style="font-size:10px;color:var(--cream-m)">หลุม</span><strong>${h+1}</strong></div>
       <div class="hc-par-wrap"><span style="font-size:11px;color:var(--cream-m);margin-right:6px">PAR</span><div class="par-stepper"><button class="ps-btn" onclick="chPar(${h},-1)">−</button><div class="ps-val" id="pv-${h}">${pars[h]}</div><button class="ps-btn" onclick="chPar(${h},1)">+</button></div></div>
-      <div class="hc-right">${G.turbo.on?`<button class="turbo-tag${turboOn?' on':''}" id="tc2-${h}" onclick="toggleTH(${h})">⚡ เทอร์โบ</button>`:''}</div>
+      <div class="hc-right">
+        <button class="turbo-tag" id="par-all-btn-${h}" onclick="setParAll(${h})" style="border-color:rgba(200,168,75,0.35);color:var(--cream-m)">👥 พาร์ทุกคน</button>
+        ${G.turbo.on?`<button class="turbo-tag${turboOn?' on':''}" id="tc2-${h}" onclick="toggleTH(${h})">⚡ เทอร์โบ</button>`:''}
+      </div>
     </div>
     <div class="hc-players">${widgets}</div>
     ${G.doubleRe.on?`<div class="dr-row" id="dr-${h}"><div style="flex:1;font-size:13px;color:var(--gold)">🎲 <span id="drm-${h}" style="font-size:18px;font-weight:600">×${G.doubleRe.mults[h]}</span></div><button class="dr-dbl ${G.doubleRe.mults[h]===2?'sel':''}" onclick="drSet(${h},2)">📣 เบิ้ล</button><button class="dr-re ${G.doubleRe.mults[h]===3?'sel':''}" onclick="drSet(${h},3)">🔄 รี</button><button style="background:none;border:1px solid rgba(255,255,255,0.1);color:var(--cream-m);padding:6px 10px;border-radius:4px;font-family:'Kanit'" onclick="drSet(${h},1)">↺</button></div>`:''}
@@ -567,6 +570,15 @@ function showHole(h){
   document.getElementById('btn-prev').disabled=h===0; document.getElementById('btn-prev').style.opacity=h===0?'0.4':'1';
   document.getElementById('btn-next').textContent=h===17?'สรุปผลการแข่งขัน 🏆':'หลุมถัดไป →';
   updateProgressBar(); updateTotals();
+}
+
+// กด "พาร์ทุกคน" — ตั้งสกอร์ทุกคนในหลุมนี้เป็น Par (เฉพาะคนที่ยังไม่มีสกอร์)
+function setParAll(h){
+  players.forEach((_,p)=>{
+    if(scores[p][h]===null)scores[p][h]=pars[h];
+  });
+  players.forEach((_,p)=>refWidget(h,p));
+  updateTotals();
 }
 
 function chPar(h,d){
@@ -712,12 +724,36 @@ function getHoleMoney(h){return{bite:calcBiteHole(h),olympic:calcOlympicHole(h),
 
 function updateTotals(){
   const sumEl=document.getElementById(`hc-sum-${currentHole}`);if(!sumEl)return;
-  let mh=getHoleMoney(currentHole),parts=players.map((pl,p)=>{
-    let s=mh.bite[p]+mh.olympic[p]+mh.team[p]+mh.farNear[p];
-    if(s===0)return null; return`<span style="color:${s>0?'var(--win)':'var(--lose)'};font-weight:500">${pl.name}(${s>0?'+':''}${s})</span>`;
-  }).filter(Boolean);
-  if(!players.every((_,p)=>scores[p][currentHole]!==null)&&parts.length===0)sumEl.innerHTML='💰 สรุปหลุมนี้: รอสกอร์...';
-  else sumEl.innerHTML=parts.length?'💰 สรุป: '+parts.join(' | '):'💰 สรุปหลุมนี้: เจ๊าหมด (0฿)';
+
+  // คำนวณยอดสะสมทุกหลุม (0..currentHole)
+  let runTot=Array(players.length).fill(0);
+  let runGame={bite:Array(players.length).fill(0),olympic:Array(players.length).fill(0),team:Array(players.length).fill(0),farNear:Array(players.length).fill(0)};
+  for(let h=0;h<=currentHole;h++){
+    const mh=getHoleMoney(h);
+    players.forEach((_,p)=>{
+      runTot[p]+=mh.bite[p]+mh.olympic[p]+mh.team[p]+mh.farNear[p];
+      runGame.bite[p]+=mh.bite[p]; runGame.olympic[p]+=mh.olympic[p];
+      runGame.team[p]+=mh.team[p]; runGame.farNear[p]+=mh.farNear[p];
+    });
+  }
+
+  // สรุปแต่ละผู้เล่น
+  const rows=players.map((pl,p)=>{
+    const tot=runTot[p];
+    const totStr=`<span style="font-weight:600;color:${tot>0?'var(--win)':tot<0?'var(--lose)':'var(--cream-m)'}">${tot>0?'+':''}${tot}฿</span>`;
+    const games=[];
+    if(G.bite.on&&runGame.bite[p]!==0){const v=runGame.bite[p];games.push(`🐶<span style="color:${v>0?'var(--win)':'var(--lose)'}">${v>0?'+':''}${v}</span>`);}
+    if(G.olympic.on&&runGame.olympic[p]!==0){const v=runGame.olympic[p];games.push(`🏅<span style="color:${v>0?'var(--win)':'var(--lose)'}">${v>0?'+':''}${v}</span>`);}
+    if(G.team.on&&runGame.team[p]!==0){const v=runGame.team[p];games.push(`🤝<span style="color:${v>0?'var(--win)':'var(--lose)'}">${v>0?'+':''}${v}</span>`);}
+    if(G.farNear.on&&runGame.farNear[p]!==0){const v=runGame.farNear[p];games.push(`🎯<span style="color:${v>0?'var(--win)':'var(--lose)'}">${v>0?'+':''}${v}</span>`);}
+    return`<div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;padding:4px 0;border-bottom:1px solid rgba(255,255,255,0.05)">
+      <span style="font-size:13px;color:var(--cream);min-width:80px;flex-shrink:0">${pl.name}</span>
+      ${totStr}
+      ${games.length?`<span style="font-size:12px;color:var(--cream-m)">${games.join(' ')}</span>`:''}
+    </div>`;
+  }).join('');
+
+  sumEl.innerHTML=`<div style="font-size:11px;color:var(--gold);letter-spacing:1px;margin-bottom:6px">💰 ยอดสะสม (หลุม 1–${currentHole+1})</div>${rows}`;
 }
 
 // --- TABS & OUTPUTS ---
@@ -839,8 +875,8 @@ const TABS=['setup','scorecard','results','money'];
 let _swX=0,_swY=0,_swOK=false;
 
 document.addEventListener('touchstart',e=>{
-  // ไม่ swipe ถ้าแตะบน interactive element
-  if(e.target.closest('.sw-ctrl,.par-stepper,.oly-r-row,.fn-wrap,.dr-row,.hc-players,.ta-btns,input,select,button'))return;
+  // ไม่ swipe ถ้าแตะบน interactive element หรือตารางที่ scroll แนวนอนได้
+  if(e.target.closest('.sw-ctrl,.par-stepper,.oly-r-row,.fn-wrap,.dr-row,.hc-players,.ta-btns,.master-table-wrap,input,select,button'))return;
   _swX=e.touches[0].clientX; _swY=e.touches[0].clientY; _swOK=true;
 },{passive:true});
 
