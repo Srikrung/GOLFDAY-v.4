@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title>Srikrung Golf Day v6.2</title>
+<title>Srikrung Golf Day v6.1</title>
 <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 :root{
@@ -13,7 +13,7 @@
   --win:#5cc98a;--lose:#e06060;
 }
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-body{background:var(--dg);color:var(--cream);font-family:'Kanit',sans-serif;min-height:100vh;overflow-x:hidden;font-size:16px;touch-action: pan-y;}
+body{background:var(--dg);color:var(--cream);font-family:'Kanit',sans-serif;min-height:100vh;overflow-x:hidden;font-size:16px}
 
 /* HEADER & NAV */
 .hdr{background:linear-gradient(180deg,var(--mg) 0%,var(--dg) 100%);border-bottom:1px solid var(--gold-d);padding:16px 20px 12px;text-align:center;position:relative;overflow:hidden}
@@ -27,7 +27,7 @@ body{background:var(--dg);color:var(--cream);font-family:'Kanit',sans-serif;min-
 .nav-btn.active::after{content:'';position:absolute;bottom:0;left:15%;right:15%;height:2px;background:var(--gold)}
 
 /* LAYOUT */
-.screen{display:none;padding:16px 14px 60px;min-height: calc(100vh - 120px);}
+.screen{display:none;padding:16px 14px 60px}
 .screen.active{display:block}
 .sec{margin-bottom:20px}
 .sec-title{font-size:11px;letter-spacing:3px;color:var(--gold);text-transform:uppercase;margin-bottom:12px;padding-bottom:7px;border-bottom:1px solid var(--gold-d);display:flex;align-items:center;gap:8px}
@@ -54,6 +54,7 @@ select option{background:var(--mg)}
 /* BUTTONS & TOGGLES */
 .btn{padding:10px 18px;border:1px solid var(--gold-d);background:transparent;color:var(--gold);cursor:pointer;font-family:'Kanit';font-size:14px;border-radius:4px;transition:all .2s}
 .btn-primary{background:linear-gradient(135deg,var(--gold-d),#6a4e18);color:var(--cream);border-color:var(--gold)}
+.btn-lg{padding:13px 34px;font-size:16px}
 .toggle{position:relative;display:inline-block;width:42px;height:23px;flex-shrink:0}
 .toggle input{opacity:0;width:0;height:0;position:absolute}
 .toggle-sl{position:absolute;inset:0;background:rgba(255,255,255,0.1);border-radius:23px;transition:.3s;border:1px solid rgba(255,255,255,0.15);cursor:pointer}
@@ -134,18 +135,29 @@ select option{background:var(--mg)}
 .ob-miss { border-color:rgba(224,96,96,0.4); color:#e06060; } .ob-miss.on { background:rgba(224,96,96,0.15); border-color:#e06060; font-weight:600;}
 .ob-dis { opacity:0.3; pointer-events:none; }
 
+/* MONEY SUMMARY BAR */
+.hc-sum-bar{background:var(--lg);padding:10px 14px;font-size:13px;color:var(--cream);border-top:1px solid var(--gold-d);line-height:1.6}
+
+/* PROGRESS BAR */
+.prog-dot{flex:1;height:8px;border-radius:4px;background:rgba(255,255,255,0.08);cursor:pointer}
+.prog-dot.done{background:rgba(200,168,75,0.35)}
+.prog-dot.scored{background:rgba(200,168,75,0.65)}
+.prog-dot.current{background:var(--gold);transform:scaleY(1.5)}
+
 /* TABLES (RESULTS & MASTER MONEY) */
+/* สำหรับหน้าเงิน (เลื่อนได้) */
 .master-table-wrap { overflow-x:auto; border-radius:8px; border:1px solid var(--gold-d); margin-bottom:24px; background:var(--mg); }
 .master-tbl { width:100%; border-collapse:collapse; min-width:800px; }
 .master-tbl th { padding:12px 8px; font-size:13px; color:var(--gold); font-weight:500; text-align:center; background:var(--lg); border-bottom:1px solid var(--gold-d); white-space:nowrap;}
 .master-tbl td { padding:10px 6px; font-size:14px; text-align:center; border-bottom:1px solid rgba(255,255,255,0.05); border-right:1px solid rgba(255,255,255,0.05); vertical-align:top;}
 .master-tbl td:last-child { border-right:none; }
 
-/* สำหรับหน้าผลลัพธ์ (ฟิตพอดีจอเพื่อเซฟรูป) */
+/* สำหรับหน้าผลลัพธ์ (ฟิตพอดีจอ) */
 .res-tbl-wrap { width: 100%; border-radius:8px; border:1px solid var(--gold-d); margin-bottom:24px; background:var(--mg); overflow:hidden; }
 .res-tbl { width:100%; border-collapse:collapse; table-layout:fixed; }
-.res-tbl th { padding:8px 2px; font-size:11px; color:var(--gold); font-weight:500; text-align:center; background:var(--lg); border-bottom:1px solid var(--gold-d); white-space:nowrap; overflow:hidden;}
+.res-tbl th { padding:8px 2px; font-size:11px; color:var(--gold); font-weight:500; text-align:center; background:var(--lg); border-bottom:1px solid var(--gold-d); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
 .res-tbl td { padding:6px 2px; font-size:12px; text-align:center; border-bottom:1px solid rgba(255,255,255,0.05); border-right:1px solid rgba(255,255,255,0.05); vertical-align:middle;}
+.res-tbl td:last-child { border-right:none; }
 
 .pt-item { font-size:12px; margin-bottom:3px; display:inline-block; padding:3px 6px; border-radius:4px; background:rgba(0,0,0,0.3); width:100%; text-align:left;}
 .pt-sum { font-size:14px; font-weight:600; margin-top:6px; padding-top:6px; border-top:1px dashed rgba(255,255,255,0.1); }
@@ -158,9 +170,10 @@ select option{background:var(--mg)}
 .rank-net{font-size:24px; font-weight:600; color:var(--win); flex-shrink:0; text-align:right;}
 
 /* AD BANNER */
-.ad-banner { margin-top:16px; padding:16px; background:linear-gradient(135deg, var(--mg), var(--lg)); border:1px solid var(--gold-d); border-radius:8px; text-align:center;}
+.ad-banner { margin-top:16px; padding:16px; background:linear-gradient(135deg, var(--mg), var(--lg)); border:1px solid var(--gold-d); border-radius:8px; text-align:center; box-shadow: 0 4px 12px rgba(0,0,0,0.5);}
 .ad-banner-txt { font-size:15px; color:var(--cream); margin-bottom:12px; line-height:1.4;}
-.ad-btn { display:inline-block; padding:8px 20px; background:linear-gradient(135deg, var(--gold), var(--gold-d)); color:#000; font-weight:600; text-decoration:none; border-radius:24px; font-size:14px;}
+.ad-btn { display:inline-block; padding:8px 20px; background:linear-gradient(135deg, var(--gold), var(--gold-d)); color:#000; font-weight:600; text-decoration:none; border-radius:24px; font-size:14px; box-shadow: 0 2px 6px rgba(0,0,0,0.4); transition: transform 0.2s;}
+.ad-btn:active { transform: scale(0.95); }
 
 #saving-ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.88);z-index:999;align-items:center;justify-content:center;flex-direction:column;gap:16px}
 #saving-ov.show{display:flex}
@@ -208,8 +221,9 @@ select option{background:var(--mg)}
       </select>
     </div>
     <div class="form-row"><input type="text" id="course-name" style="flex:1" placeholder="ชื่อสนาม"></div>
+    
     <div id="course-sub-wrap" style="display:none; padding:10px; background:rgba(0,0,0,0.2); border-radius:6px; margin-bottom:11px; border:1px solid rgba(255,255,255,0.05);">
-       <div style="font-size:12px; color:var(--cream-m); margin-bottom:6px;">เลือกคอร์สที่เล่น</div>
+       <div style="font-size:12px; color:var(--cream-m); margin-bottom:6px;">เลือกคอร์สที่เล่น (หน้า/หลัง)</div>
        <div style="display:flex; gap:10px;">
          <select id="course-f9" style="flex:1; font-size:14px; padding:6px 10px;" onchange="applyParsFromPreset()">
            <option value="A">Front 9: คอร์ส A</option><option value="B">Front 9: คอร์ส B</option><option value="C">Front 9: คอร์ส C</option>
@@ -219,7 +233,7 @@ select option{background:var(--mg)}
          </select>
        </div>
     </div>
-    <div class="form-row"><input type="date" id="game-date"></div>
+    <div class="form-row"><input type="date" id="game-date"><button class="today-btn" onclick="setToday()">วันนี้</button></div>
   </div>
 
   <div class="sec">
@@ -231,14 +245,89 @@ select option{background:var(--mg)}
   </div>
 
   <div class="sec">
-    <div class="sec-title">เกมพนันหลัก (พอยต์ละ 20 บาท)</div>
-    <div class="game-row game-on" id="gr-bite"><div class="g-header" onclick="toggleGame('bite')"><div class="g-icon">🐶</div><div class="g-info"><div class="g-name">หมากัด (จับคู่)</div></div><label class="toggle"><input type="checkbox" id="g-bite" checked><span class="toggle-sl"></span></label></div></div>
-    <div class="game-row game-on" id="gr-olympic"><div class="g-header" onclick="toggleGame('olympic')"><div class="g-icon">🏅</div><div class="g-info"><div class="g-name">โอลิมปิก</div></div><label class="toggle"><input type="checkbox" id="g-olympic" checked><span class="toggle-sl"></span></label></div></div>
-    <div class="game-row game-on" id="gr-team"><div class="g-header" onclick="toggleGame('team')"><div class="g-icon">🤝</div><div class="g-info"><div class="g-name">ทีม / โดโมะ</div></div><label class="toggle"><input type="checkbox" id="g-team" checked><span class="toggle-sl"></span></label></div><div class="g-body" id="gb-team" style="display:block"><div id="team-assign"></div></div></div>
-    <div class="game-row game-on" id="gr-farNear"><div class="g-header" onclick="toggleGame('farNear')"><div class="g-icon">🎯</div><div class="g-info"><div class="g-name">Far-Near</div></div><label class="toggle"><input type="checkbox" id="g-farNear" checked><span class="toggle-sl"></span></label></div></div>
+    <div class="sec-title">เกมพนันหลัก <span style="font-size:10px;color:var(--cream-m);font-weight:300;">(ตั้งพอยต์ละ 20 บาท)</span></div>
+
+    <div class="game-row" id="gr-bite">
+      <div class="g-header" onclick="toggleGame('bite')">
+        <div class="g-icon">🐶</div>
+        <div class="g-info"><div class="g-name">หมากัด (จับคู่ดวล)</div><div class="g-desc">สกอร์ต่ำกินสูง เบอร์ดี้x2 อีเกิ้ลx3 โฮลอินวันx50</div></div>
+        <label class="toggle" onclick="e=>e.stopPropagation()"><input type="checkbox" id="g-bite" onchange="toggleGame('bite')" checked><span class="toggle-sl"></span></label>
+      </div>
+      <div class="g-body" id="gb-bite" style="display:block"><div class="g-body-inner">
+        <div class="pt-row"><span style="font-size:13px;color:var(--cream-m)">1 พอยต์ =</span><input type="number" class="pt-val" id="gv-bite" value="20" min="1"><span style="font-size:13px;color:var(--cream-m)">บาท</span></div>
+      </div></div>
+    </div>
+
+    <div class="game-row" id="gr-olympic">
+      <div class="g-header" onclick="toggleGame('olympic')">
+        <div class="g-icon">🏅</div>
+        <div class="g-info"><div class="g-name">โอลิมปิก</div><div class="g-desc">พัตต์ลงกินรวบ โดน DQ เลื่อนฐานพอยต์อัตโนมัติ</div></div>
+        <label class="toggle" onclick="e=>e.stopPropagation()"><input type="checkbox" id="g-olympic" onchange="toggleGame('olympic')" checked><span class="toggle-sl"></span></label>
+      </div>
+      <div class="g-body" id="gb-olympic" style="display:block"><div class="g-body-inner">
+        <div class="pt-row"><span style="font-size:13px;color:var(--cream-m)">1 พอยต์ =</span><input type="number" class="pt-val" id="gv-olympic" value="20" min="1"><span style="font-size:13px;color:var(--cream-m)">บาท</span></div>
+      </div></div>
+    </div>
+
+    <div class="game-row" id="gr-team">
+      <div class="g-header" onclick="toggleGame('team')">
+        <div class="g-icon">🤝</div>
+        <div class="g-info"><div class="g-name">ทีม / ทีมสลับ / โดโมะ</div><div class="g-desc">พบกันหมด นับ Best1+Best2 · ช้วน = เสีย 5pt</div></div>
+        <label class="toggle" onclick="e=>e.stopPropagation()"><input type="checkbox" id="g-team" onchange="toggleGame('team')" checked><span class="toggle-sl"></span></label>
+      </div>
+      <div class="g-body" id="gb-team" style="display:block"><div class="g-body-inner">
+        <div class="pt-row"><span style="font-size:13px;color:var(--cream-m)">1 พอยต์ =</span><input type="number" class="pt-val" id="gv-team" value="20" min="1"><span style="font-size:13px;color:var(--cream-m)">บาท</span></div>
+        <div class="pt-row"><span style="font-size:13px;color:var(--cream-m)">ช้วน เสีย=</span><input type="number" class="pt-val" id="gv-team-chuan" value="5" min="1"><span style="font-size:13px;color:var(--cream-m)">พอยต์</span></div>
+        <div style="margin:10px 0 8px;">
+          <select id="team-swap-sel" style="padding:6px 10px;font-size:14px;width:100%">
+            <option value="domo" selected>โดโมะ (เลือกเปลี่ยนทีมเองหน้าสกอร์)</option>
+            <option value="3">สลับทีมอัตโนมัติ ทุก 3 หลุม</option>
+            <option value="6">สลับทีมอัตโนมัติ ทุก 6 หลุม</option>
+            <option value="9">สลับทีมอัตโนมัติ ทุก 9 หลุม</option>
+          </select>
+        </div>
+        <div style="font-size:12px;color:var(--cream-m);margin-bottom:7px">ตั้งค่าทีมเริ่มต้น (A, B, C)</div>
+        <div id="team-assign"></div>
+      </div></div>
+    </div>
+
+    <div class="game-row" id="gr-farNear">
+      <div class="g-header" onclick="toggleGame('farNear')">
+        <div class="g-icon">🎯</div>
+        <div class="g-info"><div class="g-name">Far-Near (เฉพาะ Par 3)</div><div class="g-desc">รองรับโหมดปกติ และโหมดเหมาออนคนเดียว</div></div>
+        <label class="toggle" onclick="e=>e.stopPropagation()"><input type="checkbox" id="g-farNear" onchange="toggleGame('farNear')" checked><span class="toggle-sl"></span></label>
+      </div>
+      <div class="g-body" id="gb-farNear" style="display:block"><div class="g-body-inner">
+        <div class="pt-row"><span style="font-size:13px;color:var(--cream-m)">1 พอยต์ =</span><input type="number" class="pt-val" id="gv-farNear" value="20" min="1"><span style="font-size:13px;color:var(--cream-m)">บาท</span></div>
+      </div></div>
+    </div>
+
+    <div class="sec-title" style="margin-top:20px">ตัวคูณพิเศษ (ทบให้หมากัด)</div>
+
+    <div class="game-row" id="gr-turbo">
+      <div class="g-header" onclick="toggleGame('turbo')">
+        <div class="g-icon">⚡</div>
+        <div class="g-info"><div class="g-name">หลุมเทอร์โบ</div><div class="g-desc">คูณหมากัด x2 ในหลุมที่กำหนด</div></div>
+        <label class="toggle" onclick="e=>e.stopPropagation()"><input type="checkbox" id="g-turbo" onchange="toggleGame('turbo')" checked><span class="toggle-sl"></span></label>
+      </div>
+      <div class="g-body" id="gb-turbo" style="display:block"><div class="g-body-inner">
+        <div class="t-grid" id="tg-front"></div><div class="t-grid" id="tg-back"></div>
+      </div></div>
+    </div>
+
+    <div class="game-row" id="gr-doubleRe">
+      <div class="g-header" onclick="toggleGame('doubleRe')">
+        <div class="g-icon">🎲</div>
+        <div class="g-info"><div class="g-name">เบิ้ล-รี</div><div class="g-desc">เรียกทวีคูณให้หมากัด (เบิ้ล x2, รี x3)</div></div>
+        <label class="toggle" onclick="e=>e.stopPropagation()"><input type="checkbox" id="g-doubleRe" onchange="toggleGame('doubleRe')" checked><span class="toggle-sl"></span></label>
+      </div>
+    </div>
+
   </div>
 
-  <button class="btn btn-primary btn-lg" style="width:100%" onclick="startGame()">เริ่มบันทึกสกอร์ ⛳</button>
+  <div style="text-align:center;margin-top:8px">
+    <button class="btn btn-primary btn-lg" style="width:100%" onclick="startGame()">เริ่มบันทึกสกอร์ ⛳</button>
+  </div>
 </div>
 
 <div class="screen" id="scr-scorecard">
@@ -250,10 +339,12 @@ select option{background:var(--mg)}
     </div>
     <div id="progress-dots" style="display:flex;gap:3px"></div>
   </div>
+  
   <div id="single-hole-wrap" style="padding:0 0 16px"></div>
+  
   <div style="display:flex;gap:8px;padding:0 14px;margin-bottom:14px">
-    <button class="btn" onclick="holeNav(-1)">← ก่อนหน้า</button>
-    <button class="btn btn-primary" style="flex:1" onclick="holeNav(1)">ถัดไป →</button>
+    <button class="btn" id="btn-prev" onclick="holeNav(-1)" style="flex:1;font-size:16px">← หลุมก่อนหน้า</button>
+    <button class="btn btn-primary" id="btn-next" onclick="holeNav(1)" style="flex:1;font-size:16px">หลุมถัดไป →</button>
   </div>
 </div>
 
@@ -269,68 +360,42 @@ select option{background:var(--mg)}
   <div id="money-cap"><div id="money-content"></div></div>
   <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:16px;justify-content:center">
     <button class="btn btn-primary" onclick="shareToLine('money-cap')" style="background:linear-gradient(135deg,#06c755,#05a546);border-color:#06c755;color:#fff">🟢 แชร์ยอดเงิน</button>
-    <button class="btn" onclick="newGame()" style="border-color:var(--lose);color:var(--lose)">+ เริ่มเกมใหม่</button>
+    <button class="btn" onclick="goTab('scorecard')">← กลับ</button>
+    <button class="btn" onclick="newGame()" style="border-color:var(--lose);color:var(--lose)">+ เริ่มเกมก๊วนใหม่</button>
   </div>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script>
-// --- CONFIG & STATE ---
-const TABS = ['setup', 'scorecard', 'results', 'money'];
-let currentTabIndex = 0;
-const courseDB = { muangek:[4,4,5,4,5,3,4,3,4,4,5,3,4,4,5,4,3,4], vista:[4,3,4,5,4,3,5,3,4,4,3,5,3,5,3,4,4,4], mthb13:[4,3,5,3,5,4,3,4,4,3,4,4,5,3,4,4,4,5], panya:{A:[4,4,3,5,4,4,5,3,4],B:[5,4,4,3,4,5,4,3,4],C:[4,3,5,4,4,3,4,5,4]}, narai:{A:[4,4,3,4,5,5,4,4,5],B:[4,5,4,4,3,4,3,5,4],C:[4,4,5,4,3,4,4,3,5]} };
-let pars=Array(18).fill(4), players=[], scores=[], gameStarted=false, olympicData=[], farNearData=[];
-let G={ bite:{on:true,val:20}, olympic:{on:true,val:20}, team:{on:true,val:20,chuanVal:5,swapType:'domo',baseTeams:[],domoTeams:[]}, farNear:{on:true,val:20}, turbo:{on:true,holes:new Set([8,17]),mult:2}, doubleRe:{on:true,mults:Array(18).fill(1)} };
+// --- COURSE DATABASE ---
+const courseDB = {
+  muangek: [4,4,5,4,5,3,4,3,4, 4,5,3,4,4,5,4,3,4],
+  vista:   [4,3,4,5,4,3,5,3,4, 4,3,5,3,5,3,4,4,4],
+  mthb13:  [4,3,5,3,5,4,3,4,4, 3,4,4,5,3,4,4,4,5],
+  panya: { A:[4,4,3,5,4,4,5,3,4], B:[5,4,4,3,4,5,4,3,4], C:[4,3,5,4,4,3,4,5,4] },
+  narai: { A:[4,4,3,4,5,5,4,4,5], B:[4,5,4,4,3,4,3,5,4], C:[4,4,5,4,3,4,4,3,5] }
+};
+
+// --- STATE ---
+let pars=Array(18).fill(4), players=[], scores=[], gameStarted=false;
+let olympicData=[], farNearData=[];
+let G={
+  bite:      {on:true, val:20},
+  olympic:   {on:true, val:20},
+  team:      {on:true, val:20, chuanVal:5, swapType:'domo', baseTeams:[], domoTeams:[]},
+  farNear:   {on:true, val:20},
+  turbo:     {on:true, holes:new Set([8,17]), mult:2},
+  doubleRe:  {on:true, mults:Array(18).fill(1)}
+};
+const ICONS = { bite:'🐶', olympic:'🏅', team:'🤝', farNear:'🎯' };
 let currentHole=0;
 
-// --- DATE FORMATTER ---
-function fmtDate(v){
-  if(!v) return "";
-  const d = new Date(v);
-  const mShort = ["ม.ค.", "ก.พ.", "มี.ค.", "เม.ย.", "พ.ค.", "มิ.ย.", "ก.ค.", "ส.ค.", "ก.ย.", "ต.ค.", "พ.ย.", "ธ.ค."];
-  return `${d.getDate()}.${mShort[d.getMonth()]}.${d.getFullYear() + 543}`;
-}
+// --- INIT ---
+setToday(); buildParGrid(); renderPlayerRows(); buildTurboGrid();
 
 function setToday(){
   const d=new Date();
   document.getElementById('game-date').value=`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
-}
-
-// --- SWIPE LOGIC ---
-let touchStartX = 0;
-let touchEndX = 0;
-document.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].screenX; }, false);
-document.addEventListener('touchend', e => {
-  touchEndX = e.changedTouches[0].screenX;
-  handleSwipe(e.target);
-}, false);
-
-function handleSwipe(target) {
-  // ไม่ทำการ Swipe ถ้ากำลังเลื่อนตาราง Master ในหน้าเงิน
-  if (target.closest('.master-table-wrap')) return;
-  
-  const diff = touchStartX - touchEndX;
-  if (Math.abs(diff) < 80) return; // ปัดสั้นเกินไปไม่นับ
-
-  if (diff > 0) { // Swipe Left -> Next Tab
-    if (currentTabIndex < TABS.length - 1) {
-      if (TABS[currentTabIndex+1] === 'results') goResults();
-      else if (TABS[currentTabIndex+1] === 'money') goMoney();
-      else goTab(TABS[currentTabIndex+1]);
-    }
-  } else { // Swipe Right -> Prev Tab
-    if (currentTabIndex > 0) goTab(TABS[currentTabIndex-1]);
-  }
-}
-
-// --- TAB NAV ---
-function goTab(n){
-  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
-  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
-  document.getElementById(`scr-${n}`).classList.add('active');
-  document.getElementById(`tab-${n}`).classList.add('active');
-  currentTabIndex = TABS.indexOf(n);
-  window.scrollTo(0,0);
 }
 
 // --- COURSE AUTO-FILL ---
@@ -338,148 +403,476 @@ function changeCoursePreset() {
   const v = document.getElementById('course-preset').value;
   const nameInput = document.getElementById('course-name');
   const subWrap = document.getElementById('course-sub-wrap');
-  if(v === 'custom') { nameInput.value = ''; subWrap.style.display = 'none'; } 
-  else if (v === 'panya' || v === 'narai') { nameInput.value = document.getElementById('course-preset').options[document.getElementById('course-preset').selectedIndex].text; subWrap.style.display = 'block'; applyParsFromPreset(); } 
-  else { nameInput.value = document.getElementById('course-preset').options[document.getElementById('course-preset').selectedIndex].text; subWrap.style.display = 'none'; pars = [...courseDB[v]]; buildParGrid(); }
+  
+  if(v === 'custom') {
+    nameInput.value = ''; subWrap.style.display = 'none';
+  } else if (v === 'panya' || v === 'narai') {
+    nameInput.value = document.getElementById('course-preset').options[document.getElementById('course-preset').selectedIndex].text;
+    subWrap.style.display = 'block';
+    applyParsFromPreset();
+  } else {
+    nameInput.value = document.getElementById('course-preset').options[document.getElementById('course-preset').selectedIndex].text;
+    subWrap.style.display = 'none';
+    pars = [...courseDB[v]];
+    buildParGrid();
+  }
 }
+
 function applyParsFromPreset() {
   const v = document.getElementById('course-preset').value;
-  if(v === 'panya' || v === 'narai') { const f9 = document.getElementById('course-f9').value; const b9 = document.getElementById('course-b9').value; pars = [...courseDB[v][f9], ...courseDB[v][b9]]; buildParGrid(); }
+  if(v === 'panya' || v === 'narai') {
+    const f9 = document.getElementById('course-f9').value;
+    const b9 = document.getElementById('course-b9').value;
+    pars = [...courseDB[v][f9], ...courseDB[v][b9]];
+    buildParGrid();
+  }
 }
+
 function buildParGrid(){
   ['par-front','par-back'].forEach((id,half)=>{
-    const el=document.getElementById(id);if(!el)return; el.innerHTML='';
-    for(let i=half*9;i<half*9+9;i++) el.innerHTML+=`<div class="par-hole"><div class="par-hole-num">H${i+1}</div><input type="number" value="${pars[i]}" onchange="pars[${i}]=parseInt(this.value); buildParGrid();"></div>`;
+    const el=document.getElementById(id);if(!el)return;
+    el.innerHTML='';
+    for(let i=half*9;i<half*9+9;i++){
+      el.innerHTML+=`<div class="par-hole"><div class="par-hole-num">H${i+1}</div>
+        <input type="number" min="3" max="5" value="${pars[i]}" onchange="pars[${i}]=Math.max(3,Math.min(5,parseInt(this.value)||4))"></div>`;
+    }
   });
 }
 
-// --- INITIAL RENDER ---
-setToday(); buildParGrid(); renderPlayerRows();
-
 function renderPlayerRows(){
   const n=+document.getElementById('num-players').value;
-  const wrap=document.getElementById('player-rows'); wrap.innerHTML='';
-  for(let i=0;i<n;i++) wrap.innerHTML+=`<div class="player-row"><div class="p-num">${i+1}</div><input type="text" class="pn p-name-input" placeholder="ผู้เล่น ${i+1}" style="flex:1"><input type="number" class="ph" placeholder="HCP" value="0" style="width:50px"></div>`;
+  const wrap=document.getElementById('player-rows');
+  const prev=[...wrap.querySelectorAll('.player-row')].map(r=>({name:r.querySelector('.pn').value,hcp:r.querySelector('.ph').value}));
+  wrap.innerHTML='';
+  for(let i=0;i<n;i++){
+    const vName = (prev[i]?.name && prev[i].name !== `ผู้เล่น ${i+1}`) ? prev[i].name : '';
+    wrap.innerHTML+=`<div class="player-row" style="flex-wrap:wrap">
+      <div class="p-num">${i+1}</div>
+      <input type="text" class="pn p-name-input" value="${vName}" placeholder="ผู้เล่น ${i+1}" style="flex:1">
+      <div style="display:flex;align-items:center;gap:6px;"><span style="font-size:12px;color:var(--cream-m)">HCP</span><input type="number" class="ph" min="0" value="${prev[i]?.hcp||'0'}"></div>
+    </div>`;
+  }
   renderTeamAssign();
 }
 function renderTeamAssign(){
   const n=+document.getElementById('num-players').value;
-  const el=document.getElementById('team-assign'); if(!el)return; el.innerHTML='';
+  const names=[...document.querySelectorAll('.pn')];
+  const el=document.getElementById('team-assign'); if(!el)return;
+  el.innerHTML='';
   for(let i=0;i<n;i++){
-    const nm=document.querySelectorAll('.pn')[i]?.value || `ผู้เล่น ${i+1}`;
-    const t=G.team.baseTeams[i] || (i%2===0?'A':'B'); G.team.baseTeams[i]=t;
-    el.innerHTML+=`<div class="ta-row"><span>${nm}</span><div class="ta-btns"><button class="ta-btn ta-a ${t==='A'?'on':''}" onclick="setTeam(${i},'A')">A</button><button class="ta-btn ta-b ${t==='B'?'on':''}" onclick="setTeam(${i},'B')">B</button></div></div>`;
+    const nm=names[i]?.value.trim()||names[i]?.placeholder||`ผู้เล่น ${i+1}`;
+    const t=G.team.baseTeams[i] || (i%3===0?'A':i%3===1?'B':'C');
+    G.team.baseTeams[i]=t;
+    el.innerHTML+=`<div class="ta-row"><div class="ta-name">${nm}</div><div class="ta-btns">
+        <button class="ta-btn ta-a${t==='A'?' on':''}" onclick="setTeam(${i},'A')">A</button>
+        <button class="ta-btn ta-b${t==='B'?' on':''}" onclick="setTeam(${i},'B')">B</button>
+        <button class="ta-btn ta-c${t==='C'?' on':''}" onclick="setTeam(${i},'C')">C</button>
+      </div></div>`;
   }
 }
 function setTeam(i,t){G.team.baseTeams[i]=t;renderTeamAssign();}
-function toggleGame(id){ G[id].on = document.getElementById(`g-${id}`).checked; document.getElementById(`gr-${id}`).classList.toggle('game-on', G[id].on); }
+function buildTurboGrid(){
+  ['tg-front','tg-back'].forEach((id,half)=>{
+    const el=document.getElementById(id);if(!el)return; el.innerHTML='';
+    for(let i=half*9;i<half*9+9;i++){
+      const on=G.turbo.holes.has(i);
+      el.innerHTML+=`<div class="t-hole"><div class="t-hole-num">H${i+1}</div><div class="t-cb${on?' on':''}" id="tc-${i}" onclick="toggleTH(${i})">⚡</div></div>`;
+    }
+  });
+}
+function toggleTH(h){
+  G.turbo.holes.has(h)?G.turbo.holes.delete(h):G.turbo.holes.add(h);
+  const on=G.turbo.holes.has(h);
+  document.getElementById(`tc-${h}`)?.classList.toggle('on',on);
+  const tag=document.getElementById(`tc2-${h}`);
+  if(tag){ tag.classList.toggle('on',on); tag.style.borderColor=on?'rgba(255,200,0,0.5)':'rgba(255,255,255,0.15)'; tag.style.color=on?'#ffc800':'var(--cream-m)'; }
+  updateTotals();
+}
+function toggleGame(id){
+  const cb=document.getElementById(`g-${id}`); if(cb) G[id].on=cb.checked;
+  const body=document.getElementById(`gb-${id}`); if(body)body.style.display=cb.checked?'block':'none';
+  document.getElementById(`gr-${id}`)?.classList.toggle('game-on',cb.checked);
+  if(id==='team'&&cb.checked)renderTeamAssign();
+}
 
 function startGame(){
   const n=+document.getElementById('num-players').value;
-  players=[...document.querySelectorAll('.pn')].slice(0,n).map((el,i)=>({name:el.value||el.placeholder, hcp:parseInt(document.querySelectorAll('.ph')[i].value)||0}));
+  players=[...document.querySelectorAll('.pn')].slice(0,n).map((el,i)=>({name:el.value.trim()||el.placeholder||`ผู้เล่น ${i+1}`, hcp:Math.max(0,+document.querySelectorAll('.ph')[i].value||0)}));
   scores=Array(n).fill(null).map(()=>Array(18).fill(null));
-  olympicData=Array(18).fill(null).map(()=>({order:[],status:{}}));
-  farNearData=Array(18).fill(null).map(()=>({mode:'none', far:null, near:null, solo:null}));
+  
+  ['bite','olympic','team','farNear'].forEach(k=>{ const ve=document.getElementById(`gv-${k}`); if(ve)G[k].val=Math.max(1,+ve.value||20); });
+  G.team.chuanVal=Math.max(1,+document.getElementById('gv-team-chuan')?.value||5);
+  G.team.swapType = document.getElementById('team-swap-sel')?.value || 'domo';
+  
+  for(let i=0;i<n;i++){if(!G.team.baseTeams[i])G.team.baseTeams[i]=i%2===0?'A':'B';}
   G.team.domoTeams = Array(18).fill(null).map(() => [...G.team.baseTeams]);
-  gameStarted=true; buildProgressBar(); showHole(0); goTab('scorecard');
+  G.doubleRe.mults=Array(18).fill(1);
+  olympicData=Array(18).fill(null).map(()=>({order:[],status:{}}));
+  farNearData=Array(18).fill(null).map(()=>({mode:'none', far:null, near:null, farSank:null, nearSank:null, solo:null, soloSank1:null, soloSank2:null}));
+
+  gameStarted=true; currentHole=0;
+  buildProgressBar(); showHole(0); goTab('scorecard');
 }
 
-// --- SCORECARD LOGIC ---
+// --- SCORECARD ---
 function buildProgressBar(){
-  const dots=document.getElementById('progress-dots'); dots.innerHTML='';
-  for(let h=0;h<18;h++){ const d=document.createElement('div'); d.className='prog-dot'; d.id=`pd-${h}`; d.onclick=()=>showHole(h); dots.appendChild(d); }
+  const dots=document.getElementById('progress-dots');if(!dots)return; dots.innerHTML='';
+  for(let h=0;h<18;h++){
+    const d=document.createElement('div'); d.className='prog-dot'; d.id=`pd-${h}`;
+    d.onclick=()=>{currentHole=h;showHole(h);}; dots.appendChild(d);
+  }
+  updateProgressBar();
 }
+function updateProgressBar(){
+  for(let h=0;h<18;h++){
+    const d=document.getElementById(`pd-${h}`);if(!d)return; d.className='prog-dot';
+    const hasScore=players.some((_,p)=>scores[p] && scores[p][h]!==null);
+    if(h===currentHole)d.classList.add('current');
+    else if(hasScore)d.classList.add('scored');
+    else if(h<currentHole)d.classList.add('done');
+  }
+  document.getElementById('prog-label').textContent=`${currentHole+1} / 18`;
+  document.getElementById('prog-total').textContent=`Par ${pars[currentHole]}`;
+}
+function holeNav(dir){
+  const next=currentHole+dir; if(next<0||next>17)return;
+  currentHole=next; showHole(currentHole);
+}
+
+function getTeamForHole(h, p) {
+  if (G.team.swapType === 'domo') return G.team.domoTeams[h][p];
+  let base = G.team.baseTeams[p];
+  if (G.team.swapType !== 'domo') {
+    const interval = parseInt(G.team.swapType);
+    if (Math.floor(h / interval) % 2 === 1) return base==='A'?'B':base==='B'?'C':'A';
+  }
+  return base;
+}
+window.toggleTeamScorecard = function(h, p) {
+  const ts = ['A','B','C']; let cur = getTeamForHole(h,p); let nxt = ts[(ts.indexOf(cur)+1)%3];
+  if (G.team.swapType === 'domo') G.team.domoTeams[h][p] = nxt; else G.team.baseTeams[p] = nxt;
+  document.getElementById(`tb-${h}-${p}`).innerHTML = getTeamBadgeHTML(h, p);
+  updateTotals();
+};
+function getTeamBadgeHTML(h, p) {
+  if (!G.team.on) return ''; const t = getTeamForHole(h, p);
+  const c = t==='A'?'background:#1a3a4a;border:1px solid #7ab8d8;color:#7ab8d8':t==='B'?'background:#4a1a1a;border:1px solid #d87a7a;color:#d87a7a':'background:#4a3a1a;border:1px solid #d8b87a;color:#d8b87a';
+  return `<span style="display:inline-block;margin-top:4px;padding:2px 7px;border-radius:4px;font-size:11px;cursor:pointer;${c}" onclick="toggleTeamScorecard(${h},${p})">ทีม ${t} 🔄</span>`;
+}
+
 function showHole(h){
-  currentHole=h; const wrap=document.getElementById('single-hole-wrap');
-  const widgets=players.map((pl,p)=>`<div class="score-widget"><div class="sw-name">${pl.name} <span id="tb-${h}-${p}">${getTeamBadgeHTML(h,p)}</span></div><div class="sw-ctrl"><button class="sw-btn" onclick="chScore(${h},${p},-1)">−</button><div class="sw-disp ${scores[p][h]===null?'empty':''}" id="swd-${h}-${p}">${scores[p][h]||'—'}</div><button class="sw-btn" onclick="chScore(${h},${p},1)">+</button></div><div class="sw-badge" id="swb-${h}-${p}"></div></div>`).join('');
+  currentHole=h; const wrap=document.getElementById('single-hole-wrap');if(!wrap)return;
+  const turboOn=G.turbo.on&&G.turbo.holes.has(h);
   
+  const widgets=players.map((_,p)=>`
+    <div class="score-widget">
+      <div class="sw-name">${players[p].name} <span id="tb-${h}-${p}">${getTeamBadgeHTML(h, p)}</span></div>
+      <div class="sw-ctrl" id="swc-${h}-${p}">
+        <button class="sw-btn" onclick="chScore(${h},${p},-1)">−</button>
+        <div class="sw-disp empty" id="swd-${h}-${p}">—</div>
+        <button class="sw-btn" onclick="chScore(${h},${p},1)">+</button>
+      </div>
+      <div class="sw-badge" id="swb-${h}-${p}"></div>
+    </div>`).join('');
+
   wrap.innerHTML=`<div class="hole-card">
-    <div class="hc-top"><div class="hc-num"><strong>${h+1}</strong></div><div class="hc-par-wrap">PAR <div class="par-stepper"><button class="ps-btn" onclick="chPar(${h},-1)">−</button><div class="ps-val">${pars[h]}</div><button class="ps-btn" onclick="chPar(${h},1)">+</button></div></div></div>
+    <div class="hc-top">
+      <div class="hc-num"><span style="font-size:10px;color:var(--cream-m)">หลุม</span><strong>${h+1}</strong></div>
+      <div class="hc-par-wrap"><span style="font-size:11px;color:var(--cream-m);margin-right:6px">PAR</span><div class="par-stepper"><button class="ps-btn" onclick="chPar(${h},-1)">−</button><div class="ps-val" id="pv-${h}">${pars[h]}</div><button class="ps-btn" onclick="chPar(${h},1)">+</button></div></div>
+      <div class="hc-right">${G.turbo.on?`<button class="turbo-tag${turboOn?' on':''}" id="tc2-${h}" onclick="toggleTH(${h})">⚡ เทอร์โบ</button>`:''}</div>
+    </div>
     <div class="hc-players">${widgets}</div>
-    ${G.olympic.on?`<div class="oly-wrap" id="oly-players-${h}"></div>`:''}
-    ${G.farNear.on && pars[h]===3?`<div class="fn-wrap"><select id="fn-mode-${h}" style="width:100%" onchange="fnChangeMode(${h},this.value)"><option value="none">-- Far-Near --</option><option value="multi">ปกติ</option><option value="solo">เหมาคนเดียว</option></select><div id="fn-ui-${h}"></div></div>`:''}
-    <div class="hc-sum-bar" id="hc-sum-${h}">สรุปหลุมนี้: รอใส่สกอร์...</div>
+    ${G.doubleRe.on?`<div class="dr-row" id="dr-${h}"><div style="flex:1;font-size:13px;color:var(--gold)">🎲 <span id="drm-${h}" style="font-size:18px;font-weight:600">×${G.doubleRe.mults[h]}</span></div><button class="dr-dbl ${G.doubleRe.mults[h]===2?'sel':''}" onclick="drSet(${h},2)">📣 เบิ้ล</button><button class="dr-re ${G.doubleRe.mults[h]===3?'sel':''}" onclick="drSet(${h},3)">🔄 รี</button><button style="background:none;border:1px solid rgba(255,255,255,0.1);color:var(--cream-m);padding:6px 10px;border-radius:4px" onclick="drSet(${h},1)">↺</button></div>`:''}
+    ${G.olympic.on?`<div class="oly-wrap" id="oly-${h}"><div class="oly-title">🏅 โอลิมปิก <span style="font-size:11px;color:var(--cream-m);margin-left:auto" id="oly-base-${h}">ฐาน: 2pt</span></div><div id="oly-players-${h}" style="display:flex;flex-direction:column;"></div><div style="margin-top:6px"><button style="padding:4px 10px;border:1px solid rgba(255,255,255,0.1);background:none;color:var(--cream-m);font-family:'Kanit';font-size:12px;border-radius:4px" onclick="olyReset(${h})">↺ รีเซ็ตโอลิมปิก</button></div></div>`:''}
+    ${G.farNear.on && pars[h]===3?`<div class="fn-wrap" id="fn-wrap-${h}"><div class="fn-title">🎯 Far-Near</div><select id="fn-mode-${h}" style="width:100%;font-size:13px;padding:6px;margin-bottom:8px" onchange="fnChangeMode(${h}, this.value)"><option value="none">-- เลือกโหมดออนกรีน --</option><option value="multi">ออน 2 คนขึ้นไป</option><option value="solo">เหมาออนคนเดียว</option></select><div id="fn-ui-${h}" style="display:flex;flex-direction:column;gap:6px"></div></div>`:''}
+    <div class="hc-sum-bar" id="hc-sum-${h}">💰 สรุปหลุมนี้: รอใส่สกอร์...</div>
   </div>`;
-  players.forEach((_,p)=>refWidget(h,p));
+  
+  players.forEach((_, p) => refWidget(h, p));
   if(G.olympic.on) olyRenderHole(h);
   if(G.farNear.on && pars[h]===3) fnRenderHole(h);
+  
+  document.getElementById('btn-prev').disabled=h===0; document.getElementById('btn-prev').style.opacity=h===0?'0.4':'1';
+  document.getElementById('btn-next').textContent=h===17?'สรุปผลการแข่งขัน 🏆':'หลุมถัดไป →';
   updateProgressBar(); updateTotals();
 }
-function chPar(h,d){ pars[h]=Math.max(3,Math.min(5,pars[h]+d)); showHole(h); }
-function chScore(h,p,d){ if(scores[p][h]===null) scores[p][h]=pars[h]+d; else scores[p][h]=Math.max(1,scores[p][h]+d); showHole(h); }
-function updateProgressBar(){ document.querySelectorAll('.prog-dot').forEach((d,i)=>{ d.className='prog-dot '+(i===currentHole?'current':scores.some(s=>s[i]!==null)?'scored':''); }); document.getElementById('prog-label').textContent=`${currentHole+1} / 18`; document.getElementById('prog-total').textContent=`Par ${pars[currentHole]}`;}
 
-function getTeamBadgeHTML(h,p){ const t=getTeamForHole(h,p); return `<span onclick="toggleTeamScorecard(${h},${p})" style="font-size:10px; padding:2px 5px; background:var(--lg); border-radius:4px; color:var(--gold)">ทีม ${t} 🔄</span>`;}
-function getTeamForHole(h,p){ return G.team.domoTeams[h][p]; }
-function toggleTeamScorecard(h,p){ const cur=G.team.domoTeams[h][p]; G.team.domoTeams[h][p]=cur==='A'?'B':'A'; showHole(h); }
-
-// --- OLYMPIC & FN (MINIFIED LOGIC FROM v6.1) ---
-function olyRenderHole(h){ /* Same logic as v6.1 */ document.getElementById(`oly-players-${h}`).innerHTML = players.map((pl,p)=>`<div class="oly-r-row">${pl.name} <button class="oly-btn" onclick="olyAct(${h},${p},'putt')">พัตต์?</button></div>`).join(''); }
-function fnRenderHole(h){ const d=farNearData[h]; document.getElementById(`fn-ui-${h}`).innerHTML = d.mode==='none'?'':`<div style="font-size:12px; margin-top:5px; color:var(--gold)">เซตค่าเกมส์ Far-Near แล้ว</div>`; }
-function fnChangeMode(h,m){ farNearData[h].mode=m; showHole(h); }
-
-// --- CALC & RESULTS ---
-function updateTotals(){ 
-  const sum = document.getElementById(`hc-sum-${currentHole}`);
-  const bite = calcBiteHole(currentHole);
-  let html = '💰 สรุป: ';
-  players.forEach((pl,p) => { if(bite[p]!==0) html += `${pl.name}(${bite[p]>0?'+':''}${bite[p]}) `; });
-  sum.innerHTML = html;
+function chPar(h,d){
+  pars[h]=Math.max(3,Math.min(5,pars[h]+d)); 
+  // Update the Setup page input dynamically
+  const pInputs = document.querySelectorAll('.par-hole input');
+  if (pInputs[h]) pInputs[h].value = pars[h];
+  // Re-render to ensure Far-Near logic triggers
+  showHole(h);
 }
-function calcBiteHole(h){
-  let m = Array(players.length).fill(0);
-  if(!players.every((_,p)=>scores[p][h]!==null)) return m;
-  for(let i=0;i<players.length;i++)for(let j=i+1;j<players.length;j++){
-    if(scores[i][h]<scores[j][h]){ m[i]+=G.bite.val; m[j]-=G.bite.val;}
-    else if(scores[j][h]<scores[i][h]){ m[j]+=G.bite.val; m[i]-=G.bite.val;}
+
+function chScore(h,p,d){
+  if(scores[p][h]===null) scores[p][h]=pars[h]+d; else scores[p][h]=Math.max(1,Math.min(20,scores[p][h]+d));
+  refWidget(h,p); updateTotals();
+}
+function drSet(h,m){ G.doubleRe.mults[h] = (G.doubleRe.mults[h]===m) ? 1 : m; showHole(h); }
+
+function refWidget(h,p){
+  const v=scores[p][h], disp=document.getElementById(`swd-${h}-${p}`), ctrl=document.getElementById(`swc-${h}-${p}`), badge=document.getElementById(`swb-${h}-${p}`);
+  if(!disp)return;
+  if(v===null){ disp.textContent='—';disp.className='sw-disp empty'; ctrl.style.cssText='border-color:rgba(200,168,75,0.25);background:var(--dg)'; disp.style.color='rgba(255,255,255,0.15)';badge.textContent='';badge.className='sw-badge';return; }
+  disp.textContent=v;disp.className='sw-disp';
+  const d=v-pars[h];
+  let k=''; if(v===1)k='hio'; else if(d<=-3)k='alba'; else if(d===-2)k='e'; else if(d===-1)k='bi'; else if(d===0)k='pa'; else if(d===1)k='bo'; else if(d===2)k='db'; else k='wr';
+  const CSS={'hio':{b:'#ffc800',bg:'linear-gradient(135deg,#ffc800,#c8a84b)',c:'#000',t:'HIO',cls:'b-hio'},'alba':{b:'#ffc800',bg:'rgba(255,200,0,0.15)',c:'#ffc800',t:'Albatross',cls:'b-alba'},'e':{b:'var(--gold)',bg:'#1a1200',c:'var(--gold)',t:'Eagle',cls:'b-eagle'},'bi':{b:'#2d6a4f',bg:'#071a0f',c:'#5cc98a',t:'Birdie',cls:'b-birdie'},'pa':{b:'rgba(255,215,0,0.4)',bg:'rgba(255,215,0,0.05)',c:'#ffd700',t:'Par',cls:'b-par'},'bo':{b:'rgba(255,255,255,0.3)',bg:'rgba(255,255,255,0.05)',c:'#ffffff',t:'Bogey',cls:'b-bogey'},'db':{b:'rgba(255,255,255,0.3)',bg:'rgba(255,255,255,0.05)',c:'#ffffff',t:'Double',cls:'b-double'},'wr':{b:'#400e0e',bg:'#3a0e0e',c:'#e06060',t:'เละ',cls:'b-worse'}};
+  ctrl.style.borderColor=CSS[k].b;ctrl.style.background=CSS[k].bg;disp.style.color=CSS[k].c; badge.textContent=CSS[k].t;badge.className=`sw-badge ${CSS[k].cls}`;
+}
+
+// --- OLYMPIC ---
+function olyAct(h, p, action) {
+  const od = olympicData[h]; const st = od.status[p]; const idx = od.order.indexOf(p);
+  if(action==='chip') { if(st==='chip') delete od.status[p]; else { od.status[p]='chip'; if(idx!==-1)od.order.splice(idx,1); } }
+  else if(action==='dq') { if(st==='dq') delete od.status[p]; else { od.status[p]='dq'; if(idx!==-1)od.order.splice(idx,1); } }
+  else if(action==='rank') { if(st==='chip'||st==='dq')return; if(idx!==-1){od.order.splice(idx,1); if(st==='sank'||st==='miss')delete od.status[p];} else od.order.push(p); }
+  else if(action==='putt') {
+    if(st==='chip')return;
+    if(st==='dq') od.status[p]='dq-sank'; else if(st==='dq-sank') od.status[p]='dq-miss'; else if(st==='dq-miss') od.status[p]='dq';
+    else if(idx!==-1) { if(st==='sank')od.status[p]='miss'; else if(st==='miss')delete od.status[p]; else od.status[p]='sank'; }
+  }
+  olyRenderHole(h); updateTotals();
+}
+function olyReset(h){ olympicData[h]={order:[],status:{}}; olyRenderHole(h); updateTotals(); }
+function olyRenderHole(h) {
+  const od = olympicData[h], wrap = document.getElementById(`oly-players-${h}`); if (!wrap) return;
+  let dqC = players.filter((_,p)=>od.status[p]==='dq'||od.status[p]==='dq-sank'||od.status[p]==='dq-miss').length;
+  let basePt = 2 + dqC; document.getElementById(`oly-base-${h}`).textContent = `ฐาน: ${basePt}pt`;
+  let html = '';
+  players.forEach((pl, p) => {
+    const st = od.status[p], idx = od.order.indexOf(p);
+    const isChip = st==='chip', isDQ = st==='dq'||st==='dq-sank'||st==='dq-miss', isSank = st==='sank'||st==='dq-sank', isMiss = st==='miss'||st==='dq-miss';
+    html += `<div class="oly-r-row"><div class="oly-r-name">${pl.name}</div>
+      <button class="oly-btn ob-chip ${isChip?'on':''} ${isDQ?'ob-dis':''}" onclick="olyAct(${h},${p},'chip')">Chip</button>
+      <button class="oly-btn ob-dq ${isDQ?'on':''} ${isChip||idx!==-1?'ob-dis':''}" onclick="olyAct(${h},${p},'dq')">🚫 DQ</button>
+      <button class="oly-btn ob-rank ${idx!==-1?'on':''} ${isChip||isDQ?'ob-dis':''}" onclick="olyAct(${h},${p},'rank')">${idx!==-1?`#${idx+1} (${Math.min(7,basePt+idx)}pt)`:'ลำดับ'}</button>
+      <button class="oly-btn ${isSank?'ob-sank on':isMiss?'ob-miss on':'ob-sank'} ${isChip||(idx===-1&&!isDQ)?'ob-dis':''}" onclick="olyAct(${h},${p},'putt')">${isSank?'ลง ✅':isMiss?'ไม่ลง ❌':'พัตต์?'}</button>
+    </div>`;
+  });
+  wrap.innerHTML = html;
+}
+
+// --- FAR NEAR ---
+function fnChangeMode(h, m) {
+  let d=farNearData[h]; d.mode=m; d.far=null; d.near=null; d.solo=null; d.farSank=null; d.nearSank=null; d.soloSank1=null; d.soloSank2=null;
+  fnRenderHole(h); updateTotals();
+}
+function fnToggleSank(h, role, st) {
+  let d=farNearData[h]; if(role==='far') d.farSank=d.farSank===st?null:st; else if(role==='near') d.nearSank=d.nearSank===st?null:st;
+  else if(role==='s1') d.soloSank1=d.soloSank1===st?null:st; else if(role==='s2') d.soloSank2=d.soloSank2===st?null:st;
+  fnRenderHole(h); updateTotals();
+}
+function fnSelectPlayer(h, role, v) { let d=farNearData[h]; v=v===""?null:parseInt(v); if(role==='far')d.far=v; else if(role==='near')d.near=v; else if(role==='solo')d.solo=v; fnRenderHole(h); updateTotals(); }
+function fnRenderHole(h) {
+  const d=farNearData[h], ui=document.getElementById(`fn-ui-${h}`); if(!ui)return;
+  document.getElementById(`fn-mode-${h}`).value = d.mode;
+  let opts = `<option value="">-เลือก-</option>` + players.map((p,i)=>`<option value="${i}">${p.name}</option>`).join('');
+  if (d.mode === 'multi') {
+    ui.innerHTML = `<div style="display:flex;gap:6px"><span style="color:#d88aff;font-size:13px;width:35px">Far</span><select style="flex:1;padding:4px;font-size:13px" onchange="fnSelectPlayer(${h},'far',this.value)">${opts.replace(`value="${d.far}"`, `value="${d.far}" selected`)}</select><button class="oly-btn ${d.farSank==='sank'?'ob-sank on':'ob-sank'} ${d.far===null?'ob-dis':''}" onclick="fnToggleSank(${h},'far','sank')">ลง (+1)</button><button class="oly-btn ${d.farSank==='miss'?'ob-miss on':'ob-miss'} ${d.far===null?'ob-dis':''}" onclick="fnToggleSank(${h},'far','miss')">ไม่ลง</button></div>
+      <div style="display:flex;gap:6px"><span style="color:#d88aff;font-size:13px;width:35px">Near</span><select style="flex:1;padding:4px;font-size:13px" onchange="fnSelectPlayer(${h},'near',this.value)">${opts.replace(`value="${d.near}"`, `value="${d.near}" selected`)}</select><button class="oly-btn ${d.nearSank==='sank'?'ob-sank on':'ob-sank'} ${d.near===null?'ob-dis':''}" onclick="fnToggleSank(${h},'near','sank')">ลง (+1)</button><button class="oly-btn ${d.nearSank==='miss'?'ob-miss on':'ob-miss'} ${d.near===null?'ob-dis':''}" onclick="fnToggleSank(${h},'near','miss')">ไม่ลง</button></div>`;
+  } else if (d.mode === 'solo') {
+    ui.innerHTML = `<div style="display:flex;gap:6px"><span style="color:#d88aff;font-size:13px;width:35px">คนออน</span><select style="flex:1;padding:4px;font-size:13px" onchange="fnSelectPlayer(${h},'solo',this.value)">${opts.replace(`value="${d.solo}"`, `value="${d.solo}" selected`)}</select></div>
+      <div style="display:flex;gap:6px"><span style="color:var(--cream-m);font-size:12px;width:40px">พัตต์ 1</span><button class="oly-btn ${d.soloSank1==='sank'?'ob-sank on':'ob-sank'} ${d.solo===null?'ob-dis':''}" onclick="fnToggleSank(${h},'s1','sank')">ลง (+2)</button><button class="oly-btn ${d.soloSank1==='miss'?'ob-miss on':'ob-miss'} ${d.solo===null?'ob-dis':''}" onclick="fnToggleSank(${h},'s1','miss')">ไม่ลง</button></div>
+      <div style="display:flex;gap:6px"><span style="color:var(--cream-m);font-size:12px;width:40px">พัตต์ 2</span><button class="oly-btn ${d.soloSank2==='sank'?'ob-sank on':'ob-sank'} ${d.solo===null||d.soloSank1!=='miss'?'ob-dis':''}" onclick="fnToggleSank(${h},'s2','sank')">ลง (+1)</button><button class="oly-btn ${d.soloSank2==='miss'?'ob-miss on':'ob-miss'} ${d.solo===null||d.soloSank1!=='miss'?'ob-dis':''}" onclick="fnToggleSank(${h},'s2','miss')">ไม่ลง (เสีย2)</button></div>`;
+  } else ui.innerHTML='';
+}
+
+// --- CALCULATION ---
+function getBiteMult(s, p) { if(s===1)return 50; let d=s-p; if(d<=-3)return 4; if(d===-2)return 3; if(d===-1)return 2; return 1; }
+function getOlyMult(s, p) { if(s===1)return 4; let d=s-p; if(d<=-3)return 4; if(d===-2)return 3; if(d===-1)return 2; return 1; }
+
+function calcBiteHole(h) {
+  let m = Array(players.length).fill(0); if (!G.bite.on || !players.every((_,p)=>scores[p][h]!==null)) return m;
+  let r = G.bite.val, tm = (G.turbo.on&&G.turbo.holes.has(h)) ? G.turbo.mult : 1, dm = G.doubleRe.on ? (G.doubleRe.mults[h]||1) : 1;
+  for(let i=0; i<players.length; i++) for(let j=i+1; j<players.length; j++){
+    let si=scores[i][h], sj=scores[j][h];
+    if (si<sj) { let amt=r*getBiteMult(si,pars[h])*tm*dm; m[i]+=amt; m[j]-=amt; }
+    else if (sj<si) { let amt=r*getBiteMult(sj,pars[h])*tm*dm; m[j]+=amt; m[i]-=amt; }
   } return m;
 }
 
-function goResults(){
-  const ds=fmtDate(document.getElementById('game-date').value);
-  let stats=players.map((pl,p)=>{
-    let tot=scores[p].reduce((a,b)=>a+(b||0),0);
-    return {...pl, tot, net:tot-pl.hcp};
+function calcOlympicHole(h) {
+  let m = Array(players.length).fill(0); if (!G.olympic.on) return m;
+  let od = olympicData[h], r = G.olympic.val;
+  let dqC = players.filter((_,p)=>od.status[p]==='dq'||od.status[p]==='dq-sank'||od.status[p]==='dq-miss').length;
+  let bPt = 2 + dqC;
+  let inf = players.map((_,p) => {
+    let st=od.status[p], idx=od.order.indexOf(p), base=null, sank=false;
+    if (st==='chip') { base=7; sank=true; } else if (st==='sank'&&idx!==-1) { base=Math.min(7,bPt+idx); sank=true; } else if (st==='miss'&&idx!==-1) { base=Math.min(7,bPt+idx); sank=false; } else if (st==='dq-sank') { base=1; sank=true; } else if (st==='dq-miss') { base=1; sank=false; }
+    if(base===null) return {p, pts:null, sank:false};
+    let s=scores[p][h], mult=s?getOlyMult(s,pars[h]):1;
+    return {p, pts: base*mult, sank};
   });
-  let html = `<div style="text-align:center;margin-bottom:15px"><strong>🏆 ผลการแข่งขัน</strong><br><small>${ds}</small></div>`;
-  html += `<div class="res-tbl-wrap"><table class="res-tbl"><thead style="background:var(--lg)"><tr><th>หลุม</th><th>พาร์</th>${players.map(p=>`<th>${p.name}</th>`).join('')}</tr></thead><tbody>`;
+  let sankers = inf.filter(x=>x.sank && x.pts!==null), missers = inf.filter(x=>!x.sank && x.pts!==null);
+  if(sankers.length===0) return m;
+  for(let i=0; i<sankers.length; i++) for(let j=i+1; j<sankers.length; j++){ let a=sankers[i], b=sankers[j], diff=Math.abs(a.pts-b.pts)*r; if(a.pts>b.pts){m[a.p]+=diff;m[b.p]-=diff;} else if(b.pts>a.pts){m[b.p]+=diff;m[a.p]-=diff;} }
+  for(let s of sankers) for(let ms of missers){ let amt=s.pts*r; m[s.p]+=amt; m[ms.p]-=amt; }
+  return m;
+}
+
+function calcTeamHole(h) {
+  let m = Array(players.length).fill(0); if (!G.team.on || !players.every((_,p)=>scores[p][h]!==null)) return m;
+  let tMap = {A:[], B:[], C:[]}; players.forEach((_,p) => { let t=getTeamForHole(h,p); if(tMap[t]) tMap[t].push(p); });
+  let active = Object.keys(tMap).filter(k=>tMap[k].length>0), r = G.team.val, cr = G.team.chuanVal * r;
+  for(let i=0; i<active.length; i++) for(let j=i+1; j<active.length; j++){
+    let t1=active[i], t2=active[j], s1=tMap[t1].map(p=>scores[p][h]).sort((a,b)=>a-b), s2=tMap[t2].map(p=>scores[p][h]).sort((a,b)=>a-b);
+    let b1_1=s1[0], b1_2=s1[1]??s1[0], b2_1=s2[0], b2_2=s2[1]??s2[0], w1=0, w2=0;
+    if(b1_1<b2_1) w1++; else if(b2_1<b1_1) w2++;
+    if(b1_2<b2_2) w1++; else if(b2_2<b1_2) w2++;
+    if(w1===w2) continue;
+    let winT = w1>w2?t1:t2, loseT = w1>w2?t2:t1, isChuan = (w1===2&&w2===0)||(w2===2&&w1===0), baseAmt = isChuan ? cr : r;
+    let totalLost = tMap[loseT].length * baseAmt, winAmt = totalLost / tMap[winT].length;
+    tMap[winT].forEach(p => m[p]+=winAmt); tMap[loseT].forEach(p => m[p]-=baseAmt);
+  } return m;
+}
+
+function calcFarNearHole(h) {
+  let m = Array(players.length).fill(0); if (!G.farNear.on || pars[h]!==3) return m;
+  let d = farNearData[h], r = G.farNear.val; if (!d) return m;
+  if (d.mode==='solo' && d.solo!==null) {
+    let p=d.solo;
+    if (d.soloSank1==='sank') players.forEach((_,i) => { if(i!==p){m[i]-=2*r; m[p]+=2*r;} });
+    else if (d.soloSank1==='miss' && d.soloSank2==='sank') players.forEach((_,i) => { if(i!==p){m[i]-=1*r; m[p]+=1*r;} });
+    else if (d.soloSank1==='miss' && d.soloSank2==='miss') players.forEach((_,i) => { if(i!==p){m[i]+=2*r; m[p]-=2*r;} });
+  } else if (d.mode==='multi' && d.far!==null && d.near!==null) {
+    if (d.farSank==='sank') players.forEach((_,i) => { if(i!==d.far){m[i]-=1*r; m[d.far]+=1*r;} });
+    else if (d.farSank==='miss' && d.nearSank==='sank') players.forEach((_,i) => { if(i!==d.near){m[i]-=1*r; m[d.near]+=1*r;} });
+  } return m;
+}
+
+function getHoleMoney(h) { return { bite:calcBiteHole(h), olympic:calcOlympicHole(h), team:calcTeamHole(h), farNear:calcFarNearHole(h) }; }
+
+function updateTotals() {
+  const sumEl = document.getElementById(`hc-sum-${currentHole}`); if(!sumEl) return;
+  let mh = getHoleMoney(currentHole), parts = players.map((pl,p) => {
+    let s = mh.bite[p]+mh.olympic[p]+mh.team[p]+mh.farNear[p];
+    if(s===0) return null; return `<span style="color:${s>0?'var(--win)':'var(--lose)'};font-weight:500">${pl.name}(${s>0?'+':''}${s})</span>`;
+  }).filter(Boolean);
+  if(!players.every((_,p)=>scores[p][currentHole]!==null) && parts.length===0) sumEl.innerHTML = '💰 สรุปหลุมนี้: รอสกอร์...';
+  else sumEl.innerHTML = parts.length ? '💰 สรุป: ' + parts.join(' | ') : '💰 สรุปหลุมนี้: เจ๊าหมด (0฿)';
+}
+
+// --- TABS & OUTPUTS ---
+function goTab(n){ document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active')); document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active')); document.getElementById(`scr-${n}`).classList.add('active'); document.getElementById(`tab-${n}`).classList.add('active'); }
+function goResults(){ if(!gameStarted){alert('กรุณาเริ่มเกมก่อน');return;} buildResults(); goTab('results'); }
+function goMoney(){ if(!gameStarted){alert('กรุณาเริ่มเกมก่อน');return;} buildMoney(); goTab('money'); }
+function newGame(){ if(confirm('รีเซ็ตทุกอย่างแล้วเริ่มเกมใหม่?')){ gameStarted=false; goTab('setup'); } }
+
+// --- RESULTS (FIT TO WIDTH RE-DESIGN) ---
+function buildResults() {
+  const ds=document.getElementById('game-date').value, cn=document.getElementById('course-name').value||'ไม่ระบุสนาม';
+  let stats=players.map((pl,p)=>{
+    let tot=0, hio=0, alba=0, e=0, bi=0, pa=0, bo=0, db=0, mx=0;
+    scores[p].forEach((s,h)=>{
+      if(s===null)return; tot+=s; const d=s-pars[h];
+      if(s===1)hio++; else if(d<=-3)alba++; else if(d===-2)e++; else if(d===-1)bi++; else if(d===0)pa++; else if(d===1)bo++; else if(d===2)db++; else mx++;
+    }); return {...pl, tot, net:tot-pl.hcp, hio, alba, e, bi, pa, bo, db, mx};
+  });
+  
+  let html = `<div style="text-align:center;margin-bottom:18px;border-bottom:1px solid var(--gold-d);padding-bottom:14px"><div style="font-size:22px;color:var(--cream)">⛳ ${cn}</div><div style="font-size:14px;color:var(--cream-m)">${ds}</div></div>`;
+  html += `<div class="rank-list">${[...stats].sort((a,b)=>a.net-b.net).map((st,rk)=>`<div class="rank-row"><div class="rank-num">#${rk+1}</div><div class="rank-name">${st.name} <span style="font-size:12px;color:var(--cream-m)">HCP ${st.hcp}</span></div><div class="rank-net">${st.tot>0?st.net:'—'}</div></div>`).join('')}</div>`;
+  
+  // บีบตารางให้พอดีจอ ไม่ต้อง Scroll 
+  let vertHtml = `<div class="res-tbl-wrap"><table class="res-tbl"><thead style="background:var(--lg)"><tr><th style="width:12%">Hole</th><th style="width:10%">Par</th>${players.map(p=>`<th style="width:${78/players.length}%">${p.name}</th>`).join('')}</tr></thead><tbody>`;
   for(let h=0; h<18; h++){
-    html += `<tr><td>${h+1}</td><td>${pars[h]}</td>${players.map((_,p)=>`<td>${scores[p][h]||'—'}</td>`).join('')}</tr>`;
+    vertHtml += `<tr><td style="color:var(--cream-m)">${h+1}</td><td style="color:var(--cream-m)">${pars[h]}</td>${players.map((_, p) => {
+      const s=scores[p][h]; if(s===null) return `<td><span style="color:rgba(255,255,255,0.2)">—</span></td>`;
+      const d=s-pars[h]; let sy='';
+      if(s===1) sy='background:linear-gradient(135deg,#ffc800,#c8a84b);color:#000;border-radius:50%;font-weight:bold';
+      else if(d<=-3) sy='background:rgba(255,200,0,0.15);color:#ffc800;border-radius:50%;font-weight:bold';
+      else if(d===-2) sy='background:var(--gold);color:var(--dg);border-radius:50%;font-weight:bold';
+      else if(d===-1) sy='background:#1a4a2e;color:#5cc98a;border-radius:50%';
+      else if(d===0) sy='background:rgba(255,215,0,0.2);color:#ffd700;border-radius:50%';
+      else if(d>=3) sy='background:#3a0e0e;color:#e06060';
+      return `<td><span style="display:inline-block;width:24px;height:24px;line-height:24px;font-size:13px;${sy}">${s}</span></td>`;
+    }).join('')}</tr>`;
   }
-  html += `<tr style="background:var(--lg)"><td>Net</td><td>-</td>${stats.map(s=>`<td><strong>${s.net}</strong></td>`).join('')}</tr></tbody></table></div>`;
-  html += `<div class="ad-banner" data-html2canvas-ignore="true"><div class="ad-banner-txt">⛳ รู้ไหม? ประกันกอล์ฟครอบคลุม Hole-in-One โบนัสด้วยนะ</div><a href="https://insure.724.co.th/golf-insure/u/AM00035138" target="_blank" class="ad-btn">ดูรายละเอียด → www.ศรีกรุง.com</a></div>`;
-  document.getElementById('res-content').innerHTML = html;
-  goTab('results');
+  
+  vertHtml += `<tr><td colspan="${players.length+2}" style="height:12px;"></td></tr>`;
+  vertHtml += `<tr style="background:var(--lg)"><td colspan="${players.length+2}" style="text-align:left;padding:8px 12px;color:var(--gold);font-size:11px">📊 สถิติ (หลุม)</td></tr>`;
+  const statRows = [
+      { label: 'โฮลอินวัน', key: 'hio', color: '#ffc800' }, { label: 'อัลบาทรอส', key: 'alba', color: '#ffc800' },
+      { label: 'อีเกิ้ล', key: 'e', color: 'var(--gold)' }, { label: 'เบอร์ดี้', key: 'bi', color: '#5cc98a' },
+      { label: 'พาร์', key: 'pa', color: '#ffd700' }, { label: 'โบกี้', key: 'bo', color: '#ffffff' },
+      { label: 'ดับเบิ้ล', key: 'db', color: '#ffffff' }, { label: 'เละ (+3)', key: 'mx', color: '#e06060' }
+  ];
+  statRows.forEach(sr => {
+      vertHtml += `<tr><td colspan="2" style="text-align:left;color:${sr.color};padding-left:12px;font-size:11px">${sr.label}</td>
+          ${stats.map(st => `<td style="color:${st[sr.key]>0?sr.color:'rgba(255,255,255,0.1)'};font-weight:${st[sr.key]>0?'600':'400'}">${st[sr.key]>0?st[sr.key]:'—'}</td>`).join('')}</tr>`;
+  });
+
+  vertHtml += `</tbody></table></div>`;
+  
+  // AD BANNER
+  const adHtml = `
+  <div class="ad-banner" data-html2canvas-ignore="true">
+    <div class="ad-banner-txt">⛳ รู้ไหม? ประกันกอล์ฟครอบคลุม<br>Hole-in-One โบนัสด้วยนะ</div>
+    <a href="https://insure.724.co.th/golf-insure/u/AM00035138" target="_blank" class="ad-btn">ดูรายละเอียด → www.ศรีกรุง.com</a>
+  </div>`;
+
+  document.getElementById('res-content').innerHTML = html + vertHtml + adHtml;
 }
 
-function goMoney(){
-  const ds=fmtDate(document.getElementById('game-date').value);
-  let html = `<div style="text-align:center;margin-bottom:15px"><strong>💰 สรุปยอดเงิน</strong><br><small>${ds}</small></div>`;
-  html += `<div style="padding:15px; background:var(--mg); border-radius:8px; border:1px solid var(--gold-d)">ยอดเงินสุทธิของทุกคนแสดงที่นี่...</div>`;
-  // Master Table
-  html += `<div class="master-table-wrap" style="margin-top:20px"><table class="master-tbl"><thead><tr><th>Hole</th>${players.map(p=>`<th>${p.name}</th>`).join('')}</tr></thead><tbody>`;
-  for(let h=0; h<18; h++) {
-    html += `<tr><td>${h+1}</td>${players.map((_,p)=>`<td>${calcBiteHole(h)[p]}</td>`).join('')}</tr>`;
+function buildMoney() {
+  const n = players.length; let tot = Array(n).fill(0), gTot = { bite:Array(n).fill(0), olympic:Array(n).fill(0), team:Array(n).fill(0), farNear:Array(n).fill(0) };
+  
+  let masterHtml = `<div class="master-table-wrap"><table class="master-tbl"><thead style="background:var(--lg)"><tr><th style="width:40px">Hole</th><th style="width:40px">Par</th>${players.map(p=>`<th>${p.name}</th>`).join('')}</tr></thead><tbody>`;
+
+  for(let h=0; h<18; h++){
+    let mh = getHoleMoney(h), hTot = Array(n).fill(0);
+    masterHtml += `<tr><td style="color:var(--cream-m);vertical-align:middle">${h+1}</td><td style="color:var(--cream-m);vertical-align:middle">${pars[h]}</td>`;
+    players.forEach((_,p) => {
+      hTot[p] = mh.bite[p]+mh.olympic[p]+mh.team[p]+mh.farNear[p];
+      tot[p] += hTot[p]; gTot.bite[p]+=mh.bite[p]; gTot.olympic[p]+=mh.olympic[p]; gTot.team[p]+=mh.team[p]; gTot.farNear[p]+=mh.farNear[p];
+      
+      let cell = '';
+      if(mh.bite[p]!==0) cell+=`<div class="pt-item">${ICONS.bite} ${mh.bite[p]>0?'+':''}${mh.bite[p]}฿</div>`;
+      if(mh.olympic[p]!==0) cell+=`<div class="pt-item">${ICONS.olympic} ${mh.olympic[p]>0?'+':''}${mh.olympic[p]}฿</div>`;
+      if(mh.team[p]!==0) cell+=`<div class="pt-item">${ICONS.team} ${mh.team[p]>0?'+':''}${mh.team[p]}฿</div>`;
+      if(mh.farNear[p]!==0) cell+=`<div class="pt-item">${ICONS.farNear} ${mh.farNear[p]>0?'+':''}${mh.farNear[p]}฿</div>`;
+      if(hTot[p]!==0) cell+=`<div class="pt-sum" style="color:${hTot[p]>0?'var(--win)':'var(--lose)'}">${hTot[p]>0?'+':''}${hTot[p]}฿</div>`;
+      masterHtml += `<td>${cell||'<span style="color:rgba(255,255,255,0.1)">-</span>'}</td>`;
+    });
+    masterHtml += `</tr>`;
   }
-  html += `</tbody></table></div>`;
-  document.getElementById('money-content').innerHTML = html;
-  goTab('money');
+  
+  masterHtml += `<tr class="master-tot-row"><td colspan="2" style="color:var(--gold);text-align:center">Net</td>`;
+  players.forEach((_,p) => { masterHtml += `<td style="color:${tot[p]>0?'var(--win)':tot[p]<0?'var(--lose)':'var(--cream-m)'}">${tot[p]>0?'+':''}${tot[p].toLocaleString()} ฿</td>`; });
+  masterHtml += `</tr></tbody></table></div>`;
+
+  let winRows = [...players.map((pl,p)=>({...pl,total:tot[p]}))].sort((a,b)=>b.total-a.total).map((pl,i)=>{
+    let v=pl.total; return `<div style="background:var(--mg);border:1px solid ${v>0?'rgba(92,201,138,0.35)':v<0?'rgba(224,96,96,0.35)':'rgba(200,168,75,0.2)'};border-radius:7px;padding:14px 16px;margin-bottom:8px"><div style="display:flex;justify-content:space-between;align-items:center"><div style="font-size:17px;color:var(--cream)">${v>0?'🏆 ':''}${pl.name}</div><div style="font-size:26px;font-weight:600;color:${v>0?'var(--win)':v<0?'var(--lose)':'var(--cream-m)'}">${v>0?'+':''}${v.toLocaleString()}<span style="font-size:14px">฿</span></div></div></div>`;
+  }).join('');
+
+  let txs=[], bal=[...tot], pos=[], neg=[];
+  for(let i=0;i<n;i++){if(bal[i]>0)pos.push({name:players[i].name,b:bal[i]}); else if(bal[i]<0)neg.push({name:players[i].name,b:Math.abs(bal[i])});}
+  pos.sort((a,b)=>b.b-a.b); neg.sort((a,b)=>a.b-b.b);
+  let pi=0, ni=0;
+  while(pi<pos.length&&ni<neg.length){
+    let amt=Math.min(pos[pi].b,neg[ni].b); if(amt>0)txs.push({from:neg[ni].name,to:pos[pi].name,amt});
+    pos[pi].b-=amt; neg[ni].b-=amt; if(pos[pi].b===0)pi++; if(neg[ni].b===0)ni++;
+  }
+  let transfers = txs.length ? `<div style="font-size:13px;letter-spacing:2px;color:var(--gold);margin:24px 0 12px;border-bottom:1px solid var(--gold-d)">บิลเคลียร์เงิน (Transfers)</div>` + txs.map(tx=>`<div style="display:flex;justify-content:space-between;background:var(--mg);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:14px 16px;margin-bottom:8px"><div style="display:flex;align-items:center;gap:12px"><span style="font-size:16px;color:var(--lose);font-weight:500">${tx.from}</span><span style="color:var(--cream-m);font-size:12px;background:rgba(255,255,255,0.05);padding:3px 8px;border-radius:12px">โอนให้ ➔</span><span style="font-size:16px;color:var(--win);font-weight:500">${tx.to}</span></div><span style="font-size:22px;font-weight:600;color:var(--gold)">${tx.amt.toLocaleString()} ฿</span></div>`).join('') : '';
+
+  let gameBreakdown='';
+  ['bite','olympic','team','farNear'].forEach(k=>{
+    if(!G[k].on || gTot[k].every(v=>v===0))return;
+    let sortedP=[...players.map((pl,p)=>({...pl,v:gTot[k][p]}))].sort((a,b)=>b.v-a.v);
+    gameBreakdown+=`<div style="background:var(--mg);border:1px solid rgba(200,168,75,0.2);border-radius:7px;padding:13px 14px;margin-bottom:8px"><div style="font-size:12px;letter-spacing:2px;color:var(--gold);margin-bottom:10px">${ICONS[k]} ${k.toUpperCase()}</div>${sortedP.map(pl=>`<div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid rgba(255,255,255,0.04)"><span style="font-size:15px;color:var(--cream)">${pl.name}</span><span style="font-size:17px;font-weight:600;color:${pl.v>0?'var(--win)':pl.v<0?'var(--lose)':'var(--cream-m)'}">${pl.v>0?'+':''}${pl.v.toLocaleString()}฿</span></div>`).join('')}</div>`;
+  });
+
+  document.getElementById('money-content').innerHTML = `<div style="text-align:center;margin-bottom:16px;padding-bottom:14px;border-bottom:1px solid var(--gold-d)"><div style="font-size:11px;letter-spacing:3px;color:var(--gold);margin-bottom:4px">สรุปยอดเงิน</div><div style="font-size:20px;color:var(--cream)">${document.getElementById('course-name').value}</div></div><div style="font-size:11px;letter-spacing:3px;color:var(--gold);margin-bottom:10px;border-bottom:1px solid var(--gold-d)">ยอดรวม Net</div>${winRows}${transfers}<div style="font-size:11px;letter-spacing:3px;color:var(--gold);margin:24px 0 10px;border-bottom:1px solid var(--gold-d)">แยกตามเกมส์</div>${gameBreakdown}<div style="font-size:11px;letter-spacing:3px;color:var(--gold);margin:24px 0 10px;border-bottom:1px solid var(--gold-d)">📊 บัญชี MASTER รายหลุม (บาท)</div>${masterHtml}`;
 }
 
-function refWidget(h,p){
-  const v=scores[p][h], disp=document.getElementById(`swd-${h}-${p}`);
-  if(v!==null) {
-    const d=v-pars[h];
-    disp.style.color = d<0?'var(--win)':d>0?'var(--lose)':'var(--gold)';
-  }
-}
-function newGame(){ if(confirm('เริ่มเกมใหม่? ข้อมูลจะถูกลบ')) location.reload(); }
 async function shareToLine(tid){
   const ov=document.getElementById('saving-ov'); ov.classList.add('show');
-  try { const c=await html2canvas(document.getElementById(tid),{backgroundColor:'#08180e',scale:2,useCORS:true, ignoreElements:(el)=>el.hasAttribute('data-html2canvas-ignore')});
-    c.toBlob(async(b)=>{ const f=new File([b],'score.png',{type:'image/png'}); ov.classList.remove('show');
-      if(navigator.canShare&&navigator.canShare({files:[f]})) await navigator.share({files:[f]}); else alert('บันทึกรูปแล้วแชร์ใน LINE');
-    },'image/png'); } catch(e){ov.classList.remove('show');}
+  try { const c=await html2canvas(document.getElementById(tid),{backgroundColor:'#08180e',scale:2,useCORS:true,logging:false, ignoreElements: (el) => el.hasAttribute('data-html2canvas-ignore')});
+    c.toBlob(async(b)=>{ const f=new File([b],'scorecard.png',{type:'image/png'}); ov.classList.remove('show');
+      if(navigator.canShare&&navigator.canShare({files:[f]}))try{await navigator.share({files:[f]});}catch(e){} else alert('ไม่สามารถแชร์ตรงๆ ได้ โปรดบันทึกหน้าจอแทนครับ');
+    },'image/png'); }catch(e){ov.classList.remove('show');}
 }
 </script>
 </body>
