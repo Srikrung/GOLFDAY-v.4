@@ -767,8 +767,48 @@ function goResults(){if(!gameStarted){alert('กรุณาเริ่มเ�
 function goMoney(){if(!gameStarted){alert('กรุณาเริ่มเกมก่อน');return;} buildMoney(); goTab('money');}
 function newGame(){if(confirm('รีเซ็ตทุกอย่างแล้วเริ่มเกมใหม่?')){gameStarted=false; goTab('setup');}}
 
+// --- HELPERS ---
+function shortName(name, n){
+  // ถ้า 6 คน ย่อชื่อเหลือ 3 ตัวอักษร
+  if(n>=6 && name.length>3) return name.slice(0,3)+'.';
+  return name;
+}
+function tblFontSize(n){ return n<=3?18:n<=5?14:12; }
+function hdrFontSize(n){ return n<=3?11:n<=5?10:9; }
+function colW(n){ return n<=3?`26px 24px repeat(${n},1fr)`:n<=5?`24px 22px repeat(${n},1fr)`:`22px 20px repeat(${n},1fr)`; }
+
+function scoreCell(s, par, fs){
+  if(s===null) return`<td style="text-align:center;font-size:${fs}px;color:rgba(255,255,255,0.18)">—</td>`;
+  const d=s-par; let sy='';
+  if(s===1)                sy=`background:linear-gradient(135deg,#ffc800,#c8a84b);color:#000;border-radius:50%;font-weight:bold`;
+  else if(d<=-3)           sy=`background:rgba(255,200,0,0.15);color:#ffc800;border-radius:50%;font-weight:bold`;
+  else if(d===-2)          sy=`background:var(--gold);color:var(--dg);border-radius:50%;font-weight:bold`;
+  else if(d===-1)          sy=`background:#1a4a2e;color:#5cc98a;border-radius:50%`;
+  else if(d===0)           sy=`background:rgba(255,215,0,0.2);color:#ffd700;border-radius:50%`;
+  else if(d>=3)            sy=`background:#3a0e0e;color:#e06060`;
+  const sz=Math.max(fs-2,10);
+  const wh=fs<=12?22:fs<=14?24:28;
+  return`<td style="text-align:center;padding:${fs<=12?5:6}px 2px"><span style="display:inline-block;width:${wh}px;height:${wh}px;line-height:${wh}px;font-size:${sz}px;${sy}">${s}</span></td>`;
+}
+
+function moneyCell(v, fs){
+  if(v===0) return`<td style="text-align:center;font-size:${fs}px;color:rgba(255,255,255,0.18);padding:${fs<=12?5:6}px 2px">—</td>`;
+  const c=v>0?'var(--win)':'var(--lose)';
+  const bg=v>0?'rgba(92,201,138,0.08)':'rgba(224,96,96,0.07)';
+  return`<td style="text-align:center;font-size:${fs}px;font-weight:600;color:${c};background:${bg};padding:${fs<=12?5:6}px 2px">${v>0?'+':''}${v}</td>`;
+}
+
+function ptCell(v, fs){
+  if(v===0) return`<td style="text-align:center;font-size:${fs}px;color:rgba(255,255,255,0.18);padding:${fs<=12?5:6}px 2px">—</td>`;
+  const c=v>0?'var(--win)':'var(--lose)';
+  const bg=v>0?'rgba(92,201,138,0.06)':'rgba(224,96,96,0.05)';
+  return`<td style="text-align:center;font-size:${fs}px;font-weight:600;color:${c};background:${bg};padding:${fs<=12?5:6}px 2px">${v>0?'+':''}${v}</td>`;
+}
+
 // --- RESULTS ---
 function buildResults(){
+  const n=players.length;
+  const fs=tblFontSize(n), hfs=hdrFontSize(n), cw=colW(n);
   const ds=fmtDate(document.getElementById('game-date').value);
   const cn=document.getElementById('course-name').value||'ไม่ระบุสนาม';
   let stats=players.map((pl,p)=>{
@@ -782,30 +822,38 @@ function buildResults(){
   let html=`<div style="text-align:center;margin-bottom:18px;border-bottom:1px solid var(--gold-d);padding-bottom:14px"><div style="font-size:22px;color:var(--cream)">⛳ ${cn}</div><div style="font-size:14px;color:var(--cream-m)">${ds}</div></div>`;
   html+=`<div class="rank-list">${[...stats].sort((a,b)=>a.net-b.net).map((st,rk)=>`<div class="rank-row"><div class="rank-num">#${rk+1}</div><div class="rank-name">${st.name} <span style="font-size:12px;color:var(--cream-m)">HCP ${st.hcp}</span></div><div class="rank-net">${st.tot>0?st.net:'—'}</div></div>`).join('')}</div>`;
 
-  let vertHtml=`<div class="res-tbl-wrap"><table class="res-tbl"><thead style="background:var(--lg)"><tr><th style="width:12%">Hole</th><th style="width:10%">Par</th>${players.map(p=>`<th style="width:${78/players.length}%">${p.name}</th>`).join('')}</tr></thead><tbody>`;
+  // ตารางสกอร์รายหลุม (adaptive font)
+  const thStyle=`padding:6px 2px;font-size:${hfs}px;color:var(--gold);font-weight:500;text-align:center;background:var(--lg);border-bottom:1px solid var(--gold-d)`;
+  let vertHtml=`<div style="background:var(--mg);border:1px solid var(--gold-d);border-radius:8px;overflow:hidden;margin-bottom:20px">
+    <table style="width:100%;border-collapse:collapse;table-layout:fixed">
+    <thead><tr>
+      <th style="${thStyle};width:${n<=3?'14%':n<=5?'12%':'10%'}">Hole</th>
+      <th style="${thStyle};width:${n<=3?'12%':n<=5?'10%':'9%'}">Par</th>
+      ${players.map(p=>`<th style="${thStyle}">${shortName(p.name,n)}</th>`).join('')}
+    </tr></thead><tbody>`;
+
   for(let h=0;h<18;h++){
-    vertHtml+=`<tr><td style="color:var(--cream-m)">${h+1}</td><td style="color:var(--cream-m)">${pars[h]}</td>${players.map((_,p)=>{
-      const s=scores[p][h]; if(s===null)return`<td><span style="color:rgba(255,255,255,0.2)">—</span></td>`;
-      const d=s-pars[h]; let sy='';
-      if(s===1)sy='background:linear-gradient(135deg,#ffc800,#c8a84b);color:#000;border-radius:50%;font-weight:bold';
-      else if(d<=-3)sy='background:rgba(255,200,0,0.15);color:#ffc800;border-radius:50%;font-weight:bold';
-      else if(d===-2)sy='background:var(--gold);color:var(--dg);border-radius:50%;font-weight:bold';
-      else if(d===-1)sy='background:#1a4a2e;color:#5cc98a;border-radius:50%';
-      else if(d===0)sy='background:rgba(255,215,0,0.2);color:#ffd700;border-radius:50%';
-      else if(d>=3)sy='background:#3a0e0e;color:#e06060';
-      return`<td><span style="display:inline-block;width:24px;height:24px;line-height:24px;font-size:13px;${sy}">${s}</span></td>`;
-    }).join('')}</tr>`;
+    vertHtml+=`<tr style="border-bottom:1px solid rgba(255,255,255,0.05)">
+      <td style="text-align:center;font-size:${fs}px;color:var(--cream-m);padding:${fs<=12?5:6}px 2px">${h+1}</td>
+      <td style="text-align:center;font-size:${fs}px;color:var(--cream-m);padding:${fs<=12?5:6}px 2px">${pars[h]}</td>
+      ${players.map((_,p)=>scoreCell(scores[p][h],pars[h],fs)).join('')}
+    </tr>`;
   }
-  vertHtml+=`<tr><td colspan="${players.length+2}" style="height:12px;"></td></tr>`;
-  vertHtml+=`<tr style="background:var(--lg)"><td colspan="${players.length+2}" style="text-align:left;padding:8px 12px;color:var(--gold);font-size:11px">📊 สถิติ (หลุม)</td></tr>`;
+
+  // แถวสถิติ
+  vertHtml+=`<tr><td colspan="${n+2}" style="height:8px"></td></tr>
+    <tr style="background:var(--lg)"><td colspan="${n+2}" style="text-align:left;padding:7px 10px;color:var(--gold);font-size:10px;letter-spacing:1px">📊 สถิติ</td></tr>`;
   const statRows=[
-    {label:'โฮลอินวัน',key:'hio',color:'#ffc800'},{label:'อัลบาทรอส',key:'alba',color:'#ffc800'},
-    {label:'อีเกิ้ล',key:'e',color:'var(--gold)'},{label:'เบอร์ดี้',key:'bi',color:'#5cc98a'},
-    {label:'พาร์',key:'pa',color:'#ffd700'},{label:'โบกี้',key:'bo',color:'#ffffff'},
-    {label:'ดับเบิ้ล',key:'db',color:'#ffffff'},{label:'เละ (+3)',key:'mx',color:'#e06060'}
+    {label:'HIO',key:'hio',color:'#ffc800'},{label:'Alba',key:'alba',color:'#ffc800'},
+    {label:'Eagle',key:'e',color:'var(--gold)'},{label:'Birdie',key:'bi',color:'#5cc98a'},
+    {label:'Par',key:'pa',color:'#ffd700'},{label:'Bogey',key:'bo',color:'#ffffff'},
+    {label:'Double',key:'db',color:'#ffffff'},{label:'เละ',key:'mx',color:'#e06060'}
   ];
   statRows.forEach(sr=>{
-    vertHtml+=`<tr><td colspan="2" style="text-align:left;color:${sr.color};padding-left:12px;font-size:11px">${sr.label}</td>${stats.map(st=>`<td style="color:${st[sr.key]>0?sr.color:'rgba(255,255,255,0.1)'};font-weight:${st[sr.key]>0?'600':'400'}">${st[sr.key]>0?st[sr.key]:'—'}</td>`).join('')}</tr>`;
+    vertHtml+=`<tr style="border-bottom:1px solid rgba(255,255,255,0.04)">
+      <td colspan="2" style="text-align:left;color:${sr.color};padding-left:10px;font-size:${hfs}px">${sr.label}</td>
+      ${stats.map(st=>`<td style="text-align:center;font-size:${fs}px;color:${st[sr.key]>0?sr.color:'rgba(255,255,255,0.12)'};font-weight:${st[sr.key]>0?'600':'400'};padding:5px 2px">${st[sr.key]>0?st[sr.key]:'—'}</td>`).join('')}
+    </tr>`;
   });
   vertHtml+=`</tbody></table></div>`;
 
@@ -815,32 +863,38 @@ function buildResults(){
 
 // --- MONEY ---
 function buildMoney(){
-  const n=players.length; let tot=Array(n).fill(0),gTot={bite:Array(n).fill(0),olympic:Array(n).fill(0),team:Array(n).fill(0),farNear:Array(n).fill(0)};
-  let masterHtml=`<div class="master-table-wrap"><table class="master-tbl"><thead style="background:var(--lg)"><tr><th style="width:40px">Hole</th><th style="width:40px">Par</th>${players.map(p=>`<th>${p.name}</th>`).join('')}</tr></thead><tbody>`;
-  for(let h=0;h<18;h++){
-    let mh=getHoleMoney(h),hTot=Array(n).fill(0);
-    masterHtml+=`<tr><td style="color:var(--cream-m);vertical-align:middle">${h+1}</td><td style="color:var(--cream-m);vertical-align:middle">${pars[h]}</td>`;
+  const n=players.length;
+  const fs=tblFontSize(n), hfs=hdrFontSize(n);
+
+  // คำนวณทุกหลุม
+  let tot=Array(n).fill(0);
+  let gTot={bite:Array(n).fill(0),olympic:Array(n).fill(0),team:Array(n).fill(0),farNear:Array(n).fill(0)};
+  const allMH=Array.from({length:18},(_,h)=>{
+    const mh=getHoleMoney(h);
     players.forEach((_,p)=>{
-      hTot[p]=mh.bite[p]+mh.olympic[p]+mh.team[p]+mh.farNear[p];
-      tot[p]+=hTot[p]; gTot.bite[p]+=mh.bite[p]; gTot.olympic[p]+=mh.olympic[p]; gTot.team[p]+=mh.team[p]; gTot.farNear[p]+=mh.farNear[p];
-      let cell='';
-      if(mh.bite[p]!==0)cell+=`<div class="pt-item">${ICONS.bite} ${mh.bite[p]>0?'+':''}${mh.bite[p]}฿</div>`;
-      if(mh.olympic[p]!==0)cell+=`<div class="pt-item">${ICONS.olympic} ${mh.olympic[p]>0?'+':''}${mh.olympic[p]}฿</div>`;
-      if(mh.team[p]!==0)cell+=`<div class="pt-item">${ICONS.team} ${mh.team[p]>0?'+':''}${mh.team[p]}฿</div>`;
-      if(mh.farNear[p]!==0)cell+=`<div class="pt-item">${ICONS.farNear} ${mh.farNear[p]>0?'+':''}${mh.farNear[p]}฿</div>`;
-      if(hTot[p]!==0)cell+=`<div class="pt-sum" style="color:${hTot[p]>0?'var(--win)':'var(--lose)'}">${hTot[p]>0?'+':''}${hTot[p]}฿</div>`;
-      masterHtml+=`<td>${cell||'<span style="color:rgba(255,255,255,0.1)">-</span>'}</td>`;
+      tot[p]+=mh.bite[p]+mh.olympic[p]+mh.team[p]+mh.farNear[p];
+      gTot.bite[p]+=mh.bite[p]; gTot.olympic[p]+=mh.olympic[p];
+      gTot.team[p]+=mh.team[p]; gTot.farNear[p]+=mh.farNear[p];
     });
-    masterHtml+=`</tr>`;
-  }
-  masterHtml+=`<tr class="master-tot-row"><td colspan="2" style="color:var(--gold);text-align:center">Net</td>`;
-  players.forEach((_,p)=>{masterHtml+=`<td style="color:${tot[p]>0?'var(--win)':tot[p]<0?'var(--lose)':'var(--cream-m)'}">${tot[p]>0?'+':''}${tot[p].toLocaleString()} ฿</td>`;});
-  masterHtml+=`</tr></tbody></table></div>`;
+    return mh;
+  });
 
-  let winRows=[...players.map((pl,p)=>({...pl,total:tot[p]}))].sort((a,b)=>b.total-a.total).map((pl)=>{
-    let v=pl.total; return`<div style="background:var(--mg);border:1px solid ${v>0?'rgba(92,201,138,0.35)':v<0?'rgba(224,96,96,0.35)':'rgba(200,168,75,0.2)'};border-radius:7px;padding:14px 16px;margin-bottom:8px"><div style="display:flex;justify-content:space-between;align-items:center"><div style="font-size:17px;color:var(--cream)">${v>0?'🏆 ':''}${pl.name}</div><div style="font-size:26px;font-weight:600;color:${v>0?'var(--win)':v<0?'var(--lose)':'var(--cream-m)'}">${v>0?'+':''}${v.toLocaleString()}<span style="font-size:14px">฿</span></div></div></div>`;
-  }).join('');
+  // ── ยอดรวม Net cards ──
+  const gridCols=n<=4?`repeat(${n},1fr)`:'repeat(3,1fr)';
+  let winRows=`<div style="display:grid;grid-template-columns:${gridCols};gap:7px;margin-bottom:16px">`;
+  [...players.map((pl,p)=>({...pl,total:tot[p],idx:p}))].sort((a,b)=>b.total-a.total).forEach(pl=>{
+    const v=pl.total;
+    const games=['bite','olympic','team','farNear'].filter(k=>G[k].on&&gTot[k][pl.idx]!==0)
+      .map(k=>{const vv=gTot[k][pl.idx];return`${ICONS[k]}<span style="color:${vv>0?'var(--win)':'var(--lose)'};font-size:9px">${vv>0?'+':''}${vv}</span>`;}).join(' ');
+    winRows+=`<div style="background:var(--lg);border:1px solid ${v>0?'rgba(92,201,138,0.3)':v<0?'rgba(224,96,96,0.3)':'rgba(200,168,75,0.15)'};border-radius:7px;padding:8px 10px">
+      <div style="font-size:11px;color:var(--cream-m);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${pl.name}</div>
+      <div style="font-size:${n<=3?20:16}px;font-weight:600;color:${v>0?'var(--win)':v<0?'var(--lose)':'var(--cream-m)'};margin-top:2px">${v>0?'+':''}${v.toLocaleString()}฿</div>
+      <div style="font-size:9px;color:var(--cream-m);margin-top:3px;line-height:1.6">${games}</div>
+    </div>`;
+  });
+  winRows+='</div>';
 
+  // ── บิลเคลียร์ ──
   let txs=[],bal=[...tot],pos=[],neg=[];
   for(let i=0;i<n;i++){if(bal[i]>0)pos.push({name:players[i].name,b:bal[i]});else if(bal[i]<0)neg.push({name:players[i].name,b:Math.abs(bal[i])});}
   pos.sort((a,b)=>b.b-a.b); neg.sort((a,b)=>a.b-b.b);
@@ -849,16 +903,84 @@ function buildMoney(){
     let amt=Math.min(pos[pi].b,neg[ni].b); if(amt>0)txs.push({from:neg[ni].name,to:pos[pi].name,amt});
     pos[pi].b-=amt; neg[ni].b-=amt; if(pos[pi].b===0)pi++; if(neg[ni].b===0)ni++;
   }
-  let transfers=txs.length?`<div style="font-size:13px;letter-spacing:2px;color:var(--gold);margin:24px 0 12px;border-bottom:1px solid var(--gold-d)">บิลเคลียร์เงิน</div>`+txs.map(tx=>`<div style="display:flex;justify-content:space-between;background:var(--mg);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:14px 16px;margin-bottom:8px"><div style="display:flex;align-items:center;gap:12px"><span style="font-size:16px;color:var(--lose);font-weight:500">${tx.from}</span><span style="color:var(--cream-m);font-size:12px;background:rgba(255,255,255,0.05);padding:3px 8px;border-radius:12px">โอนให้ ➔</span><span style="font-size:16px;color:var(--win);font-weight:500">${tx.to}</span></div><span style="font-size:22px;font-weight:600;color:var(--gold)">${tx.amt.toLocaleString()} ฿</span></div>`).join(''):'';
+  let transfers=txs.length?`<div style="font-size:11px;letter-spacing:2px;color:var(--gold);margin:16px 0 10px;border-bottom:1px solid var(--gold-d)">บิลเคลียร์เงิน</div>`+txs.map(tx=>`<div style="display:flex;justify-content:space-between;background:var(--mg);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:12px 14px;margin-bottom:8px"><div style="display:flex;align-items:center;gap:10px"><span style="font-size:15px;color:var(--lose);font-weight:500">${tx.from}</span><span style="color:var(--cream-m);font-size:11px;background:rgba(255,255,255,0.05);padding:2px 7px;border-radius:10px">➔</span><span style="font-size:15px;color:var(--win);font-weight:500">${tx.to}</span></div><span style="font-size:20px;font-weight:600;color:var(--gold)">${tx.amt.toLocaleString()} ฿</span></div>`).join(''):'';
 
-  let gameBreakdown='';
+  // ── MASTER TABLE: หลุมเป็นแถว / ผู้เล่นเป็นคอลัมน์ ──
+  const thS=`padding:6px 2px;font-size:${hfs}px;color:var(--gold);font-weight:500;text-align:center;background:var(--lg);border-bottom:1px solid var(--gold-d)`;
+  let masterHtml=`<div style="background:var(--mg);border:1px solid var(--gold-d);border-radius:8px;overflow:hidden;margin-bottom:16px">
+    <table style="width:100%;border-collapse:collapse;table-layout:fixed">
+    <thead><tr>
+      <th style="${thS};width:${n<=3?'14%':n<=5?'12%':'10%'}">H</th>
+      <th style="${thS};width:${n<=3?'12%':n<=5?'10%':'9%'}">P</th>
+      ${players.map(p=>`<th style="${thS}">${shortName(p.name,n)}</th>`).join('')}
+    </tr></thead><tbody>`;
+
+  for(let h=0;h<18;h++){
+    const mh=allMH[h];
+    masterHtml+=`<tr style="border-bottom:1px solid rgba(255,255,255,0.04)">
+      <td style="text-align:center;font-size:${fs}px;color:var(--cream-m);padding:${fs<=12?5:6}px 2px">${h+1}</td>
+      <td style="text-align:center;font-size:${fs}px;color:var(--cream-m);padding:${fs<=12?5:6}px 2px">${pars[h]}</td>
+      ${players.map((_,p)=>moneyCell(mh.bite[p]+mh.olympic[p]+mh.team[p]+mh.farNear[p],fs)).join('')}
+    </tr>`;
+  }
+  masterHtml+=`<tr style="background:var(--lg);border-top:2px solid var(--gold-d)">
+    <td colspan="2" style="text-align:center;font-size:${hfs}px;color:var(--gold);font-weight:500;padding:8px 2px">รวม ฿</td>
+    ${players.map((_,p)=>{
+      const v=tot[p];
+      return`<td style="text-align:center;font-size:${fs}px;font-weight:600;color:${v>0?'var(--win)':v<0?'var(--lose)':'var(--cream-m)'};padding:8px 2px">${v>0?'+':''}${v.toLocaleString()}</td>`;
+    }).join('')}
+  </tr></tbody></table></div>`;
+
+  // ── ตารางแยกตามเกมส์ รายหลุม (พ้อย ไม่มีบาท) ──
+  let gameDetailHtml='';
   ['bite','olympic','team','farNear'].forEach(k=>{
     if(!G[k].on||gTot[k].every(v=>v===0))return;
-    let sortedP=[...players.map((pl,p)=>({...pl,v:gTot[k][p]}))].sort((a,b)=>b.v-a.v);
-    gameBreakdown+=`<div style="background:var(--mg);border:1px solid rgba(200,168,75,0.2);border-radius:7px;padding:13px 14px;margin-bottom:8px"><div style="font-size:12px;letter-spacing:2px;color:var(--gold);margin-bottom:10px">${ICONS[k]} ${k.toUpperCase()}</div>${sortedP.map(pl=>`<div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid rgba(255,255,255,0.04)"><span style="font-size:15px;color:var(--cream)">${pl.name}</span><span style="font-size:17px;font-weight:600;color:${pl.v>0?'var(--win)':pl.v<0?'var(--lose)':'var(--cream-m)'}">${pl.v>0?'+':''}${pl.v.toLocaleString()}฿</span></div>`).join('')}</div>`;
+    const totRow=players.map((_,p)=>ptCell(gTot[k][p],fs)).join('');
+    const sumLine=players.map((pl,p)=>{const v=gTot[k][p];return v===0?'':`<span style="font-size:9px;color:${v>0?'var(--win)':'var(--lose)'}">${shortName(pl.name,n)} ${v>0?'+':''}${v}</span>`;}).filter(Boolean).join('  ');
+    let rows='';
+    for(let h=0;h<18;h++){
+      const mh=allMH[h], valPerPt=G[k].val||1;
+      const pts=players.map((_,p)=>Math.round(mh[k][p]/valPerPt));
+      if(pts.every(v=>v===0))continue;
+      rows+=`<tr style="border-bottom:1px solid rgba(255,255,255,0.04)">
+        <td style="text-align:center;font-size:${fs}px;color:var(--cream-m);padding:${fs<=12?4:5}px 2px">${h+1}</td>
+        <td style="text-align:center;font-size:${fs}px;color:var(--cream-m);padding:${fs<=12?4:5}px 2px">${pars[h]}</td>
+        ${pts.map(v=>ptCell(v,fs)).join('')}
+      </tr>`;
+    }
+    if(!rows)return;
+    gameDetailHtml+=`<div style="background:var(--mg);border:1px solid rgba(200,168,75,0.15);border-radius:8px;overflow:hidden;margin-bottom:12px">
+      <div style="background:rgba(200,168,75,0.07);padding:7px 10px;display:flex;align-items:center;gap:8px;border-bottom:1px solid rgba(200,168,75,0.15)">
+        <span style="font-size:14px">${ICONS[k]}</span>
+        <span style="font-size:11px;font-weight:500;color:var(--cream)">${k==='bite'?'หมากัด':k==='olympic'?'โอลิมปิก':k==='team'?'ทีม':'Far-Near'}</span>
+        <span style="font-size:9px;color:var(--cream-m);margin-left:4px">${sumLine}</span>
+      </div>
+      <table style="width:100%;border-collapse:collapse;table-layout:fixed">
+      <thead><tr>
+        <th style="${thS};width:${n<=3?'14%':n<=5?'12%':'10%'}">H</th>
+        <th style="${thS};width:${n<=3?'12%':n<=5?'10%':'9%'}">P</th>
+        ${players.map(p=>`<th style="${thS}">${shortName(p.name,n)}</th>`).join('')}
+      </tr></thead><tbody>
+      ${rows}
+      <tr style="background:var(--lg);border-top:1px solid var(--gold-d)">
+        <td colspan="2" style="text-align:center;font-size:${hfs}px;color:var(--gold);font-weight:500;padding:7px 2px">รวม</td>
+        ${totRow}
+      </tr>
+      </tbody></table>
+    </div>`;
   });
 
-  document.getElementById('money-content').innerHTML=`<div style="text-align:center;margin-bottom:16px;padding-bottom:14px;border-bottom:1px solid var(--gold-d)"><div style="font-size:11px;letter-spacing:3px;color:var(--gold);margin-bottom:4px">สรุปยอดเงิน</div><div style="font-size:20px;color:var(--cream)">${document.getElementById('course-name').value}</div></div><div style="font-size:11px;letter-spacing:3px;color:var(--gold);margin-bottom:10px;border-bottom:1px solid var(--gold-d)">ยอดรวม Net</div>${winRows}${transfers}<div style="font-size:11px;letter-spacing:3px;color:var(--gold);margin:24px 0 10px;border-bottom:1px solid var(--gold-d)">แยกตามเกมส์</div>${gameBreakdown}<div style="font-size:11px;letter-spacing:3px;color:var(--gold);margin:24px 0 10px;border-bottom:1px solid var(--gold-d)">📊 บัญชี MASTER รายหลุม (บาท)</div>${masterHtml}`;
+  document.getElementById('money-content').innerHTML=`
+    <div style="text-align:center;margin-bottom:16px;padding-bottom:14px;border-bottom:1px solid var(--gold-d)">
+      <div style="font-size:11px;letter-spacing:3px;color:var(--gold);margin-bottom:4px">สรุปยอดเงิน</div>
+      <div style="font-size:20px;color:var(--cream)">${document.getElementById('course-name').value||'ไม่ระบุสนาม'}</div>
+    </div>
+    <div style="font-size:11px;letter-spacing:2px;color:var(--gold);margin-bottom:10px;border-bottom:1px solid var(--gold-d)">ยอดรวม Net</div>
+    ${winRows}${transfers}
+    <div style="font-size:11px;letter-spacing:2px;color:var(--gold);margin:20px 0 10px;border-bottom:1px solid var(--gold-d)">📊 บัญชี MASTER รายหลุม (฿)</div>
+    ${masterHtml}
+    <div style="font-size:11px;letter-spacing:2px;color:var(--gold);margin:20px 0 10px;border-bottom:1px solid var(--gold-d)">📋 รายหลุม แยกตามเกมส์ (พ้อย)</div>
+    ${gameDetailHtml}`;
 }
 
 async function shareToLine(tid){
@@ -875,8 +997,7 @@ const TABS=['setup','scorecard','results','money'];
 let _swX=0,_swY=0,_swOK=false;
 
 document.addEventListener('touchstart',e=>{
-  // ไม่ swipe ถ้าแตะบน interactive element หรือตารางที่ scroll แนวนอนได้
-  if(e.target.closest('.sw-ctrl,.par-stepper,.oly-r-row,.fn-wrap,.dr-row,.hc-players,.ta-btns,.master-table-wrap,input,select,button'))return;
+  if(e.target.closest('.sw-ctrl,.par-stepper,.oly-r-row,.fn-wrap,.dr-row,.hc-players,.ta-btns,input,select,button'))return;
   _swX=e.touches[0].clientX; _swY=e.touches[0].clientY; _swOK=true;
 },{passive:true});
 
